@@ -15,7 +15,7 @@
   </style>
 </head>
 <body>
-  <h1>👋 Hi, I'm Kostanca Kovaci</h1>
+  <h1> Hi, I'm Kostanca Kovaci</h1>
   <p>Data Scientist passionate about leveraging data to create insights, build predictive models, and develop interactive dashboards.</p>
 
   <h2>📂 Featured Projects</h2>
