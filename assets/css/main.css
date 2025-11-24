@@ -180,6 +180,7 @@ input, select, textarea {
 		margin: 0 0 2rem 0;
 	}
 
+
 	h1, h2, h3, h4, h5, h6 {
 		font-family: "Source Sans Pro", Helvetica, sans-serif;
 		font-weight: 900;
@@ -4620,7 +4621,6 @@ input, select, textarea {
 			right: 0;
 			text-align: right;
 			top: 0;
-			vertical-align: middle;
 			width: 7rem;
 		}
 
@@ -4687,3 +4687,12 @@ input, select, textarea {
 		}
 
 	}
+	
+	.posts .image.fit img {
+    width: 100%;       /* Make the image fill the card width */
+    height: 300px;     /* Fixed height for all project images */
+    object-fit: cover; /* Crop/scale image to fill without distortion */
+    border-radius: 8px; /* Optional: rounded corners for nicer look */
+}
+
+

@@ -1,0 +1,115 @@
+/* ============================
+   CUSTOM THEME — FASHION STYLE
+   Color palette from your reference image
+   ============================ */
+
+/* COLORS:
+   Burgundy: #6A0F1A
+   Black: #000000
+   Ivory background: #F3EFE8
+   Light beige: #E6DFD6
+   Charcoal: #2E2E2E
+*/
+
+/* GLOBAL BACKGROUND + TEXT */
+body {
+    background: #2E2E2E !important;
+    color: #2E2E2E !important;
+}
+
+/* HEADINGS (more editorial) */
+h1, h2, h3, h4 {
+    color: #2E2E2E !important;
+    font-family: "Playfair Display", serif !important;
+    letter-spacing: 0.5px;
+}
+
+/* BODY FONT */
+body, p, li {
+    font-family: "Inter", sans-serif !important;
+}
+
+/* NAVIGATION BAR */
+#nav ul.links li a {
+    color: #fffdfd !important;
+}
+
+#nav ul.links li.active a {
+    color: #6A0F1A !important;  /* burgundy highlight */
+    font-weight: 600;
+}
+
+/* HEADER LOGO */
+#header .logo {
+    color: #F3EFE8 !important;
+}
+
+/* POSTS / PROJECT CARDS */
+.posts article {
+    background: #FFFFFF;
+    border: 1px solid #E6DFD6;
+    box-shadow: none !important;
+}
+
+/* BUTTONS */
+.button {
+    background-color: #6A0F1A !important;
+    color: #F3EFE8 !important;
+    border: none !important;
+}
+
+.button:hover {
+    opacity: 0.85;
+}
+
+.button.alt {
+    background-color: #000000 !important;
+    color: #FFFFFF !important;
+}
+
+/* SECTION BLOCKS (optional burgundy sections) */
+.section-burgundy {
+    background: #6A0F1A !important;
+    color: #F3EFE8 !important;
+    padding: 3em 2em !important;
+}
+
+/* BLOG / CASE STUDY PAGE ELEMENTS */
+.post-content img {
+    border-radius: 4px;
+    margin: 1.5em 0;
+}
+
+.post-content .caption {
+    font-size: 0.85em;
+    opacity: 0.7;
+}
+
+/* DROP CAP STYLE */
+.post-content p:first-of-type::first-letter {
+    font-family: "Playfair Display", serif;
+    font-size: 3.6rem;
+    float: left;
+    line-height: 0.85;
+    padding-right: 8px;
+    padding-top: 4px;
+    color: #6A0F1A;
+}
+
+/* BLOCKQUOTES (editorial look) */
+blockquote {
+    border-left: 4px solid #6A0F1A !important;
+    padding-left: 1em !important;
+    font-style: italic;
+    color: #2E2E2E;
+}
+
+/* FOOTER */
+#footer {
+    background: #F3EFE8 !important;
+    color: #2E2E2E !important;
+}
+
+#footer a {
+    color: #6A0F1A !important;
+}
