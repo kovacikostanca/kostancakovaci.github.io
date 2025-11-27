@@ -4696,3 +4696,41 @@ input, select, textarea {
 }
 
 
+.post-categories {
+    display: flex;
+    justify-content: center;  /* center horizontally */
+    gap: 1rem;                /* space between buttons */
+    flex-wrap: wrap;          /* wrap on smaller screens */
+    margin: 2rem 0;
+}
+
+.category-btn {
+    display: inline-block;
+    background-color: #fff;   /* white background */
+    color: #111;              /* dark letters */
+    text-decoration: none;    /* remove default underline */
+    padding: 0.6rem 1.2rem;
+    border-radius: 5px;
+    border-bottom: 2px solid transparent; /* for underline effect */
+    cursor: pointer;
+    font-size: 1rem;
+    transition: border-bottom 0.3s, background-color 0.3s;
+}
+
+.category-btn:hover {
+    border-bottom: 2px solid #000; /* black underline on hover */
+}
+
+.category-btn {
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: all 0.3s;
+}
+
+.category-btn:hover {
+    transform: translateY(-px);  /* slightly lifts the button */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+
+
+
