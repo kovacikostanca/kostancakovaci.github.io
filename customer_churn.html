@@ -1,0 +1,273 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Customer Churn Prediction - [Your Name]</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <link rel="stylesheet" href="assets/css/blog.css" />
+    
+    <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+</head>
+<body class="is-preload">
+
+<div id="wrapper">
+
+    <!-- Header -->
+    <header id="header">
+        <a href="index.html" class="logo">Portfolio</a>
+    </header>
+
+    <!-- Navigation -->
+    <nav id="nav">
+        <ul class="links">
+            <li><a href="index.html">Projects</a></li>
+            <li class="active"><a href="blog.html">Customer Churn Prediction</a></li>
+        </ul>
+        <ul class="icons">
+            <li><a href="https://www.linkedin.com/in/your-linkedin/" class="icon brands alt fa-linkedin"><span class="label">linkedin</span></a></li>
+            <li><a href="https://github.com/your-github" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div id="main">
+
+        <section class="post-content">
+            <!-- Title -->
+            <h1>Customer Churn Prediction Project</h1>
+            <p class="post-date">Published: December 3, 2025</p>
+
+             <!-- Image link wrapper -->
+            <a>
+            <div class="hover-image-container">
+                <img src="images/customer_churn.jpg">
+            </div>
+        </a>
+
+            <!-- Project Overview -->
+            <h2>Project Objective</h2>
+            <p style="text-indent: 0.8em; margin-bottom: 1.4rem;">
+                The goal of this project is to predict customer churn for a telecom company and 
+                provide actionable insights to improve retention. By identifying customers at risk 
+                of leaving, the company can implement targeted strategies to reduce attrition, optimize 
+                marketing spend, and increase lifetime value. </br>
+            </br>
+            Using a realistic dataset of 7,043 telecom customers, the project demonstrates challenges 
+            faced by analytics teams in retaining customers, including imbalanced classes, categorical 
+            and numerical data preprocessing, and deriving business insights.
+            </p>
+
+            <!-- Business Problem -->
+            <h2>Business Problem</h2>
+            <p>
+                Telecom companies face high churn rates, affecting revenue and growth. The challenge is to identify customers likely to churn and understand the main drivers of attrition:
+            </p>
+            <ul>
+                <li>Short tenure and month-to-month contracts</li>
+                <li>High monthly charges</li>
+                <li>Lack of additional services (TechSupport, OnlineSecurity)</li>
+                <li>Need for targeted retention strategies</li>
+            </ul>
+
+
+            <!-- Executive Summary -->
+            <h2>Executive Summary</h2>
+            <p style="text-indent: 0.8em; margin-bottom: 1.4rem;">
+                Customer churn is a significant challenge in the telecom sector, with 26.5% of customers 
+                at risk of leaving. Using the Telco dataset (7,043 customers), we built machine learning 
+                models to predict churn and uncover its key drivers.
+            </p>
+            <p><strong>Key outcomes:</strong></p>
+            <ul>
+                <li>XGBoost outperformed Logistic Regression, achieving 69% recall, effectively identifying most churners.</li>
+                <li>Main factors influencing churn: month-to-month contracts, short tenure, high monthly charges, and lack of TechSupport/OnlineSecurity.</li>  
+                <li>Business recommendations include targeted retention campaigns, service improvements, and monitoring programs to maximize customer loyalty.</li>
+            </ul>
+            <p style="text-indent: 0.8em; margin-bottom: 1.4rem;">
+                This project demonstrates the <strong>integration of predictive modeling with actionable business insights.</strong>
+            </p>
+
+            <!-- Dataset -->
+            <h2>Dataset</h2>
+            <p>
+                The dataset contains customer information, account details, and service usage, including:
+            </p>
+            <ul>
+                <li><strong>Customer demographics:</strong> Gender, SeniorCitizen, Partner, Dependents</li>
+                <li><strong>Account info:</strong> Tenure, Contract, PaperlessBilling, PaymentMethod</li>
+                <li><strong>Services:</strong> PhoneService, MultipleLines, InternetService, OnlineSecurity, OnlineBackup, DeviceProtection, TechSupport, StreamingTV, StreamingMovies</li>
+                <li><strong>Charges:</strong> MonthlyCharges, TotalCharges</li>
+                <li><strong>Target:</strong> Churn (Yes/No)</li>
+            </ul>
+
+            <!-- Introduction -->
+            <h2>Introduction</h2>
+            <p style="text-indent: 0.8em; margin-bottom: 1.4rem;">
+                Customer churn negatively affects revenue and growth. Understanding who is likely to leave and why is critical 
+                for telecom companies to retain customers and maintain profitability. This project uses historical customer data 
+                to build predictive models and guide business decisions.
+            </p>
+            <p><strong>Dataset Overview</strong></p>
+            <ul>
+                <li>7,043 customers, 21 features</li>
+                <li>Features include demographic info, account details, and service usage</li>
+                <li>Target variable: Churn (Yes/No)</li>
+            </ul>
+
+            <p><strong>Challenges</strong></p>
+            <ul>
+                <li>Imbalanced dataset (73.5% non-churners, 26.5% churners)</li>
+                <li>Categorical and numerical data types requiring preprocessing</li>
+                <li>Need for actionable insights, not just predictive performance</li>
+            </ul>
+
+            <!-- Methodology -->
+            <h2>Methodology</h2>
+            <p><strong>4.1 Data Preprocessing:</strong></p>
+            <ul>
+                <li>Converted TotalCharges to numeric after handling missing values.</li>
+                <li>Encoded categorical variables (binary encoding for Yes/No features, one-hot encoding for multi-class features).</li>
+                <li>Dropped customerID as non-predictive.</li>
+            </ul>
+            <p><strong>4.2 Feature Engineering:</strong></p>
+            <ul>
+                <li>Checked for outliers (none significant).</li>
+                <li>Split data into training (80%) and test (20%) sets.</li>
+                <li>Prepared features for model input.</li>
+            </ul>
+            <p><strong>4.3 Modeling Approach:</strong></p>
+            <ul>
+                <li>Logistic Regression: Baseline model for interpretability.</li>
+                <li>XGBoost: Tree-based model for improved predictive performance.</li>
+            </ul>
+            <p><strong>4.4 Evaluation Metrics:</strong></p>
+            <ul>
+                <li>Accuracy, Precision, Recall, F1-score</li>
+                <li>Confusion Matrix to assess true/false positives and negatives</li>
+            </ul>
+    
+
+            <!-- Results -->
+            <h2>Results</h2>
+
+            <p style="font-size: 1.1rem;"><strong>Logistic Regression</strong></p>
+            <div class="table-container">
+            <table>
+                <tr>
+                    <th>Metric</th>
+                    <th>Value</th>
+                </tr>
+                <tr><td>Accuracy</td><td>80%</td></tr>
+                <tr><td>Churn Precision</td><td>0.64</td></tr>
+                <tr><td>Churn Recall</td><td>0.54</td></tr>
+                <tr><td>F1-score (Churn)</td><td>0.58</td></tr>
+            </table>
+            </div>
+            <br />
+            <p class="note"><strong>Observation:</strong> Logistic Regression misses many churners (false negatives).</p>
+
+            <p style="font-size: 1.1rem;"><strong>XGBoost (Recommended)</strong></p>
+            <div class="table-container">
+            <table>
+                <tr>
+                    <th>Metric</th>
+                    <th>Value</th>
+                </tr>
+                <tr><td>Accuracy</td><td>74%</td></tr>
+                <tr><td>Churn Precision</td><td>0.51</td></tr>
+                <tr><td>Churn Recall</td><td>0.69</td></tr>
+                <tr><td>F1-score (Churn)</td><td>0.59</td></tr>
+            </table>
+            </div>
+            <br />
+
+            <p style="font-size: 1.1rem;"><strong>Confusion Matrix:</strong></p>
+            <div class="table-container">
+            <table>
+                <tr>
+                    <th>Actual \ Predicted</th>
+                    <th>No churn</th>
+                    <th>Churn</th>
+                </tr>
+                <tr><td>No churn</td><td>782</td><td>251</td></tr>
+                <tr><td>Churn</td><td>115</td><td>259</td></tr>
+            </table>
+            </div>
+            <br />
+
+            <p style="font-size: 1.1rem;"><strong>Top Features Driving Churn:</strong></p>
+            <ul>
+                <li>Contract type (Month-to-month)</li>
+                <li>Tenure</li>
+                <li>MonthlyCharges</li>
+                <li>Fiber optic InternetService</li>
+                <li>TechSupport</li>
+                <li>OnlineSecurity</li>
+                <li>OnlineBackup</li>
+                <li>StreamingTV</li>
+                <li>DeviceProtection</li>
+                <li>PaymentMethod</li>
+            </ul>
+
+            <p style="text-indent: 0.8em; margin-bottom: 1.4rem;"><strong>Insights:</strong></p>
+            <ul>
+                <li>Captures more at-risk customers → higher recall.</li>
+                <li>Slightly lower precision → some false positives, manageable for retention campaigns.</li>
+                <li>Aligns with business intuition and actionable strategies.</li>
+            </ul>
+
+
+            <!-- Conclusion -->
+            <h2>Conclusion</h2>
+            <p style="text-indent: 0.8em; margin-bottom: 1.4rem;">
+                This project demonstrates how machine learning can be leveraged to predict customer churn and guide 
+                retention strategies. XGBoost effectively identifies at-risk customers, highlighting contract type, 
+                tenure, and service quality as primary churn drivers.
+            </p>
+
+            <p><strong>Recommendations:</strong></p>
+            <ul>
+                <li>Focus retention campaigns on high-risk customers (month-to-month, short tenure, high charges).</li>
+                <li>Promote TechSupport and OnlineSecurity services.</li>
+                <li>Improve service quality for high-value segments.</li>
+                <li>Monitor campaign outcomes and retrain models quarterly.</li>
+            </ul>
+
+            <p><strong>Impact:</strong></p>
+            <p>By using predictive analytics to proactively address churn, companies can increase customer loyalty, reduce revenue loss, and optimize marketing investments.</p>
+
+            <!-- Links -->
+            <ul class="actions">
+                <li><a href="index.html" class="button">Back to Portfolio</a></li>
+                <li><a href="https://github.com/kovacikostanca/Data-Science-Portfolio/tree/main/Customer%20Churn%20Prediction" class="button alt">GitHub Repository</a></li>
+            </ul>
+
+        </section>
+
+    </div>
+
+    <!-- Footer -->
+    <footer id="footer">
+        <section class="split contact">
+            <section class="alt">
+                <h3>Location</h3>
+                <p>London, UK | [Your City]</p>
+            </section>
+            <section>
+                <h3>Email</h3>
+                <p><a href="#">your-email@example.com</a></p>
+            </section>
+        </section>
+    </footer>
+
+</div>
+
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/main.js"></script>
+
+
+</body>
+</html>
