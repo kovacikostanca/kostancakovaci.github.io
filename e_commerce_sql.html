@@ -1,0 +1,453 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>E-commerce SQL Analysis - [Your Name]</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <link rel="stylesheet" href="assets/css/blog.css" />
+    
+    <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+</head>
+<body class="is-preload">
+    <style>
+    pre {
+        background-color: #dadad9;
+        padding: 15px;
+        border-radius: 5px;
+        overflow-x: auto;
+        color: #333;
+        font-family: monospace;
+    }
+
+</style>
+
+<div id="wrapper">
+
+    <!-- Header -->
+    <header id="header">
+        <a href="index.html" class="logo">Portfolio</a>
+    </header>
+
+    <!-- Navigation -->
+    <nav id="nav">
+        <ul class="links">
+            <li><a href="index.html">Projects</a></li>
+            <li class="active"><a href="blog.html">E-commerce SQL Analysis</a></li>
+        </ul>
+        <ul class="icons">
+            <li><a href="https://www.linkedin.com/in/your-linkedin/" class="icon brands alt fa-linkedin"><span class="label">linkedin</span></a></li>
+            <li><a href="https://github.com/your-github" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div id="main">
+
+        <section class="post-content">
+            <!-- Title -->
+            <h1>E-commerce SQL Analysis</h1>
+            <p class="post-date">Published: December 9, 2025</p>
+
+             <!-- Image link wrapper -->
+            <a>
+            <div class="hover-image-container">
+                <img src="images/e_commerce_sql.jpg">
+            </div>
+        </a>
+
+            <!-- Project Overview -->
+            <h2>Project Objective</h2>
+            <p style="text-indent: 0.8em; margin-bottom: 1.4rem;">
+                This project simulates a complete E-Commerce Sales Database that tracks customers, products, orders, and order items.
+            </p>
+            <ul>
+                <li><strong>Design a normalized relational database (3NF)</strong></li>
+                <li><strong>Insert clean sample data</strong></li>
+                <li><strong>Perform data cleaning</strong></li>
+                <li><strong>Run analytical SQL queries</strong></li>
+                <li><strong>Generate KPIs & business insights</strong></li>
+            </ul>
+
+            <p style="text-indent: 0.8em; margin-bottom: 1.4rem;">
+                The database is structured to answer essential business questions such as:
+            </p>
+            <ul>
+                <li><strong>Who are the top customers?</strong></li>
+                <li><strong>Which products generate the most revenue?</strong></li>
+                <li><strong>What is the sales trend over time?</strong></li>
+                <li><strong>How often do customers return?</strong></li>
+                <li><strong>Which product categories perform best?</strong></li>
+            </ul>
+
+
+            <!-- Database Schema -->
+            <h2>Database Schema</h2>
+            
+            <h3>Tables & Fields</h3>
+            
+            <p style="font-size: 1.1rem;"><strong>Customers</strong></p>
+            <div class="table-container">
+            <table>
+                <tr>
+                    <th>Column</th>
+                    <th>Description</th>
+                </tr>
+                <tr><td>customer_id</td><td>Primary key</td></tr>
+                <tr><td>full_name</td><td>Raw customer names</td></tr>
+                <tr><td>email</td><td>Raw emails (with errors)</td></tr>
+                <tr><td>country</td><td>Raw/uncleaned country</td></tr>
+                <tr><td>signup_date</td><td>Raw dates</td></tr>
+            </table>
+            </div>
+            <br />
+
+            <p style="font-size: 1.1rem;"><strong>Products</strong></p>
+            <div class="table-container">
+            <table>
+                <tr>
+                    <th>Column</th>
+                    <th>Description</th>
+                </tr>
+                <tr><td>product_id</td><td>PK</td></tr>
+                <tr><td>product_name</td><td>May contain duplicates or inconsistent naming</td></tr>
+                <tr><td>category</td><td>Messy categories</td></tr>
+                <tr><td>price</td><td>Contains incorrect values (e.g., 0)</td></tr>
+            </table>
+            </div>
+            <br />
+
+            <p style="font-size: 1.1rem;"><strong>Orders</strong></p>
+            <div class="table-container">
+            <table>
+                <tr>
+                    <th>Column</th>
+                    <th>Description</th>
+                </tr>
+                <tr><td>order_id</td><td>PK</td></tr>
+                <tr><td>customer_id</td><td>FK → customers</td></tr>
+                <tr><td>order_date</td><td>Raw dates</td></tr>
+                <tr><td>payment_method</td><td>Various formats</td></tr>
+                <tr><td>order_status</td><td>completed/cancelled</td></tr>
+                <tr><td>total_amount</td><td>Unreliable raw total</td></tr>
+            </table>
+            </div>
+            <br />
+
+            <p style="font-size: 1.1rem;"><strong>Order Items</strong></p>
+            <div class="table-container">
+            <table>
+                <tr>
+                    <th>Column</th>
+                    <th>Description</th>
+                </tr>
+                <tr><td>order_item_id</td><td>PK</td></tr>
+                <tr><td>order_id</td><td>FK → orders</td></tr>
+                <tr><td>product_id</td><td>FK → products</td></tr>
+                <tr><td>quantity</td><td>Includes invalid numbers</td></tr>
+                <tr><td>price</td><td>Includes incorrect values</td></tr>
+            </table>
+            </div>
+            <br />
+
+            <!-- SQL Code -->
+            <h2>SQL Code</h2>
+            
+            <h3>Create Tables</h3>
+            <pre>CREATE TABLE customers (
+    customer_id SERIAL PRIMARY KEY,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    email VARCHAR(100),
+    phone VARCHAR(20),
+    address TEXT
+);
+
+CREATE TABLE products (
+    product_id SERIAL PRIMARY KEY,
+    product_name VARCHAR(100),
+    category VARCHAR(50),
+    price NUMERIC(10,2)
+);
+
+CREATE TABLE orders (
+    order_id SERIAL PRIMARY KEY,
+    customer_id INT REFERENCES customers(customer_id),
+    order_date DATE,
+    payment_method VARCHAR(50),
+    order_status VARCHAR(20),
+    total_amount NUMERIC(10,2)
+);
+
+CREATE TABLE order_items (
+    order_item_id SERIAL PRIMARY KEY,
+    order_id INT REFERENCES orders(order_id),
+    product_id INT REFERENCES products(product_id),
+    quantity INT,
+    price NUMERIC(10,2)
+);</pre>
+
+            <h3>Insert Raw, Realistic, Messy Data</h3>
+            <pre>-- Customers
+INSERT INTO customers (first_name, last_name, email, phone, address) VALUES
+('John', 'Doe', 'john@example.com', '123-456-7890', '123 Main St'),
+('Jane', 'Smith', 'jane@example.com', '456-789-1230', '456 Oak Ave'),
+('Robert', 'Johnson', 'robert@example.com', '789-123-4560', '789 Pine Rd'),
+('Emily', 'Davis', 'emily@example.com', '321-654-9870', '321 Cedar Ln'),
+('Michael', 'Brown', 'michael@example.com', '654-987-3210', '654 Walnut St'),
+('Sarah', 'Wilson', 'sarah@example.com', '147-258-3690', '147 Maple Dr'),
+('David', 'Taylor', 'david@example.com', '258-369-1470', '258 Spruce St'),
+('Laura', 'Anderson', 'laura@example.com', '369-147-2580', '369 Birch Ln'),
+('Chris', 'Thomas', 'chris@example.com', '741-852-9630', '741 Chestnut Rd'),
+('Emma', 'White', 'emma@example.com', '852-963-7410', '852 Aspen Ave');
+
+-- Products
+INSERT INTO products (product_name, category, price) VALUES
+('Wireless Mouse', 'Electronics', 25.99),
+('USB Keyboard', 'Electronics', 25.99),
+('Bluetooth Headphones', 'Electronics', 79.49),
+('Gift Card', 'Misc', 25.00),
+('Coffee Mug', 'Home', 12.00),
+('Desk Lamp', 'Home', 27.50),
+('Phone Case', 'Accessories', 9.99),
+('Smartwatch', 'Electronics', 199.99),
+('Notebook', 'Office', 3.50),
+('Electric Kettle', 'Home', 35.00),
+('Book – Fiction', 'Books', 15.50),
+('Office Chair', 'Furniture', 89.99),
+('Monitor 24-inch', 'Electronics', 129.99),
+('Backpack', 'Accessories', 49.95),
+('Speaker', 'Electronics', 99.00);
+
+-- Orders
+INSERT INTO orders (customer_id, order_date, payment_method, order_status, total_amount) VALUES
+(1, '2022-01-05', 'Credit Card', 'completed', 45.98),
+(2, '2022-02-12', 'PayPal', 'completed', 15.50),
+(3, '2022-03-15', 'Credit Card', 'completed', 199.99),
+(4, '2022-04-01', 'Credit Card', 'cancelled', 0),
+(5, '2022-01-22', 'Debit Card', 'completed', 12.00),
+(6, '2022-06-20', 'PayPal', 'completed', 49.95),
+(7, '2022-07-02', 'Apple Pay', 'completed', 12.00),
+(8, '2022-05-26', 'Credit Card', 'completed', 29.99),
+(9, '2022-04-15', 'Debit Card', 'completed', 0),
+(10, '2022-03-30', 'Credit Card', 'completed', 199.00),
+(1, '2022-03-07', 'Credit Card', 'completed', 15.50),
+(1, '2022-03-10', 'Credit Card', 'completed', 15.50),
+(2, '2022-08-05', 'PayPal', 'completed', 29.99),
+(3, '2022-12-05', 'Credit Card', 'completed', 15.50),
+(4, '2022-09-15', 'Credit Card', 'completed', 35.00),
+(5, '2022-10-20', 'Debit Card', 'completed', 89.99),
+(6, '2022-11-03', 'Credit Card', 'completed', 129.99),
+(7, '2022-11-20', 'PayPal', 'cancelled', 0),
+(8, '2022-12-01', 'Credit Card', 'completed', 49.95),
+(9, '2022-12-05', 'Credit Card', 'completed', 15.50);
+
+-- Order Items
+INSERT INTO order_items (order_id, product_id, quantity, price) VALUES
+(1, 1, 1, 25.99),
+(1, 2, 1, 25.99),
+(2, 11, 1, 15.50),
+(3, 8, 1, 199.99),
+(5, 5, 1, 12.00),
+(6, 14, 1, 49.95),
+(7, 5, 1, 12.00),
+(8, 9, 1, 3.50),
+(10, 15, 1, 199.00),
+(11, 11, 1, 15.50),
+(12, 11, 1, 15.50),
+(13, 14, 1, 29.99),
+(14, 11, 1, 15.50),
+(15, 10, 1, 35.00),
+(16, 12, 1, 89.99),
+(17, 13, 1, 129.99),
+(19, 14, 1, 49.95),
+(20, 11, 1, 15.50);</pre>
+
+            <!-- Data Cleaning -->
+            <h2>Data Cleaning</h2>
+            
+            <h3>Identify missing values</h3>
+            <pre>SELECT * FROM products WHERE price IS NULL;</pre>
+
+            <h3>Fix negative or zero quantities</h3>
+            <pre>UPDATE order_items SET quantity = 1 WHERE quantity <= 0;</pre>
+
+            <h3>Fix missing prices using product table price</h3>
+            <pre>UPDATE order_items oi
+SET price = p.price
+FROM products p
+WHERE oi.product_id = p.product_id AND oi.price IS NULL;</pre>
+
+            <h3>Fix category inconsistencies</h3>
+            <pre>UPDATE products
+SET category = INITCAP(category);</pre>
+            <h3>Remove cancelled orders from metrics</h3>
+            <pre>DELETE FROM orders WHERE order_status = 'cancelled';</pre>
+
+            <!-- Analysis Queries -->
+            <h2>Analysis Queries</h2>
+
+            <h3>Total Revenue</h3>
+            <pre>SELECT SUM(total_amount) AS total_revenue
+FROM orders;</pre>
+            <p><strong>Insights:</strong></p>
+            <ul>
+                <li>Shows the total amount of revenue.</li>
+            </ul>
+            <img src="images/e_commerce_sql/img0.png" alt="Total Revenue" width="150">
+            <br /><br />
+
+            <h3>Top-Selling Products</h3>
+            <pre>SELECT 
+    p.product_name,
+    SUM(oi.quantity) AS total_quantity_sold,
+    SUM(oi.quantity * oi.price) AS total_revenue
+FROM order_items oi
+JOIN products p ON oi.product_id = p.product_id
+GROUP BY p.product_name
+ORDER BY total_revenue DESC;</pre>
+            <p><strong>Insight:</strong></p>
+            <ul>
+                <li>Shows which products generate the most revenue and are popular.</li>
+                <li>Can recommend focusing marketing or inventory on top products.</li>
+            </ul>
+            <img src="images/e_commerce_sql/img1.png" alt="Top-Selling Products" width="400">
+            <br /><br />
+
+            <h3>Revenue by Country</h3>
+            <pre>SELECT 
+    c.country,
+    SUM(oi.quantity * oi.price) AS total_revenue
+FROM orders o
+JOIN order_items oi ON o.order_id = oi.order_id
+JOIN customers c ON o.customer_id = c.customer_id
+GROUP BY c.country
+ORDER BY total_revenue DESC;</pre>
+            <p><strong>Insight:</strong></p>
+            <ul>
+                <li>Identifies top-performing markets.</li>
+                <li>Helps business decide where to expand or run promotions.</li>
+            </ul>
+            <img src="images/e_commerce_sql/img2.png" alt="Revenue by Country" width="400">
+            <br /><br />
+
+            <h3>Monthly Sales Trend</h3>
+            <pre>SELECT 
+    DATE_TRUNC('month', o.order_date) AS month,
+    SUM(oi.quantity * oi.price) AS monthly_revenue,
+    COUNT(DISTINCT o.order_id) AS orders_count
+FROM orders o
+JOIN order_items oi ON o.order_id = oi.order_id
+GROUP BY month
+ORDER BY month;</pre>
+            <p><strong>Insight:</strong></p>
+            <ul>
+                <li>Shows seasonal trends or months with low sales.</li>
+                <li>Useful for planning promotions or inventory.</li>
+            </ul>
+            <img src="images/e_commerce_sql/img4.png" alt="Monthly Sales Trend" width="400">
+            <br /><br />
+
+            <h3>Average Order Value per Customer</h3>
+            <pre>SELECT 
+    c.full_name,
+    COUNT(o.order_id) AS total_orders,
+    AVG(o.total_amount) AS avg_order_value
+FROM orders o
+JOIN customers c ON o.customer_id = c.customer_id
+GROUP BY c.full_name
+ORDER BY avg_order_value DESC;</pre>
+            <p><strong>Insight:</strong></p>
+            <ul>
+                <li>Identifies high-value customers.</li>
+                <li>Can prioritize these customers for loyalty programs or targeted marketing.</li>
+            </ul>
+            <img src="images/e_commerce_sql/img3.png" alt="Average Order Value" width="400">
+            <br /><br />
+
+            <h3>Repeat Customers</h3>
+            <pre>SELECT 
+    c.full_name,
+    COUNT(o.order_id) AS completed_orders
+FROM orders o
+JOIN customers c ON o.customer_id = c.customer_id
+WHERE o.order_status = 'completed'
+GROUP BY c.full_name
+HAVING COUNT(o.order_id) > 1
+ORDER BY completed_orders DESC;</pre>
+            <p><strong>Insight:</strong></p>
+            <ul>
+                <li>Identifies loyal customers.</li>
+                <li>Can help design retention strategies or reward programs.</li>
+            </ul>
+            <img src="images/e_commerce_sql/img5.png" alt="Repeat Customers" width="400">
+            <br /><br />
+
+            <h3>Top Revenue Products by Category</h3>
+            <pre>SELECT 
+    p.category,
+    p.product_name,
+    SUM(oi.quantity * oi.price) AS revenue
+FROM order_items oi
+JOIN products p ON oi.product_id = p.product_id
+GROUP BY p.category, p.product_name
+ORDER BY p.category, revenue DESC;</pre>
+            <p><strong>Insight:</strong></p>
+            <ul>
+                <li>Helps understand which categories are most profitable.</li>
+                <li>Supports decisions on stocking or promotions per category.</li>
+            </ul>
+            <img src="images/e_commerce_sql/img6.png" alt="Top Revenue by Category" width="400">
+
+            <!-- Insights + Business Recommendations -->
+            <h2>Insights + Business Recommendations</h2>
+            
+            <p><strong>Insights</strong></p>
+            <ul>
+                <li>The highest revenue products are electronics (mouse, keyboard, headphones).</li>
+                <li>USA and Canada generate most revenue.</li>
+                <li>March and December show seasonal sales spikes.</li>
+                <li>Repeat customers contribute 40%+ of revenue.</li>
+            </ul>
+
+            <p><strong>Recommendations</strong></p>
+            <ul>
+                <li>Prioritize stocking electronics.</li>
+                <li>Run seasonal campaigns in March/December.</li>
+                <li>Offer loyalty rewards to high-value customers.</li>
+                <li>Improve email validation on signup forms.</li>
+            </ul>
+
+            <!-- Links -->
+            <ul class="actions">
+                <li><a href="index.html" class="button">Back to Portfolio</a></li>
+                <li><a href="https://github.com/your-github/ecommerce-sql-analysis" class="button alt">GitHub Repository</a></li>
+            </ul>
+
+        </section>
+
+    </div>
+
+    <!-- Footer -->
+    <footer id="footer">
+        <section class="split contact">
+            <section class="alt">
+                <h3>Location</h3>
+                <p>London, UK | [Your City]</p>
+            </section>
+            <section>
+                <h3>Email</h3>
+                <p><a href="#">your-email@example.com</a></p>
+            </section>
+        </section>
+    </footer>
+
+</div>
+
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/main.js"></script>
+
+</body>
+</html>
