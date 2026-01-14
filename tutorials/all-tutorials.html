@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorials | Kostanca Kovaci</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+  <div class="bg-gradient"></div>
+
+  <!-- Navigation -->
+  <nav id="navbar">
+    <div class="nav-container">
+      <div class="logo">PORTFOLIO</div>
+      <div class="nav-links">
+        <a href="../index.html">Home</a>
+        <a href="../index.html#contact">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <section id="portfolio" style="padding-top: 120px;">
+    <div class="section-header">
+      <h2>All Projects</h2>
+      <p>A complete collection of my data science & analytics work</p>
+    </div>
+
+    <!-- Category Buttons -->
+    <div class="project-filters">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="data_cleaning">Data Cleaning</button>
+    </div>
+
+    <!-- Projects Grid -->
+    <div class="projects-grid"> 
+
+      <!-- Project 1 -->
+      <div class="project-card" data-category="data_cleaning" onclick="location.href='tutorial1.html'">
+        <img src="../images/data_clean_tut.png" class="project-image">
+        <div class="project-content">
+          <h3>Data Cleaning in Python</h3>
+          <p>Python | Pandas</p>
+        </div>
+      </div>
+
+  </section>
+
+  <footer>
+    <p>© 2025 Kostanca Kovaci</p>
+  </footer>
+
+  <!-- Filtering Script -->
+  <script>
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const projects = document.querySelectorAll('.project-card');
+
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const filter = btn.getAttribute('data-filter');
+
+        projects.forEach(project => {
+          if (filter === 'all' || project.getAttribute('data-category') === filter) {
+            project.style.display = 'block';
+          } else {
+            project.style.display = 'none';
+          }
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
