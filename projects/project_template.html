@@ -1,0 +1,1818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sales Forecasting Engine | Case Study</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1e40af;
+      --secondary: #7c3aed;
+      --accent: #06b6d4;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --dark: #0f172a;
+      --dark-light: #1e293b;
+      --gray-50: #f8fafc;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --gray-700: #334155;
+      --gray-800: #1e293b;
+      --gray-900: #0f172a;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #ffffff;
+      color: var(--gray-900);
+      line-height: 1.7;
+    }
+
+    /* Navigation */
+    .nav {
+      position: sticky;
+      top: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--gray-200);
+      z-index: 1000;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 16px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-back {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--gray-700);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+
+    .nav-back:hover {
+      background: var(--gray-100);
+      color: var(--primary);
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .nav-btn {
+      padding: 8px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+      border: 1px solid var(--gray-200);
+      background: white;
+      color: var(--gray-700);
+    }
+
+    .nav-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .nav-btn.primary {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .nav-btn.primary:hover {
+      background: var(--primary-dark);
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+      padding: 80px 40px 60px;
+    }
+
+    .hero-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .breadcrumb {
+      display: flex;
+      gap: 8px;
+      color: var(--gray-700);
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    .breadcrumb span {
+      color: var(--gray-700);
+    }
+
+    .hero-title {
+      font-size: 56px;
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 24px;
+      color: var(--gray-900);
+      letter-spacing: -0.02em;
+    }
+
+    .hero-subtitle {
+      font-size: 20px;
+      color: var(--gray-700);
+      max-width: 800px;
+      line-height: 1.6;
+      margin-bottom: 40px;
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      max-width: 900px;
+    }
+
+    .stat {
+      text-align: left;
+    }
+
+    .stat-value {
+      font-size: 40px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: var(--gray-700);
+      font-weight: 500;
+    }
+
+    /* Quick Nav */
+    .quick-nav {
+      background: white;
+      border-bottom: 1px solid var(--gray-200);
+      position: sticky;
+      top: 69px;
+      z-index: 100;
+    }
+
+    .quick-nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 40px;
+      display: flex;
+      gap: 32px;
+      overflow-x: auto;
+    }
+
+    .quick-nav a {
+      padding: 16px 0;
+      color: var(--gray-700);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .quick-nav a:hover,
+    .quick-nav a.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    /* Main Layout */
+    .main-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 60px 40px;
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 60px;
+    }
+
+    /* Content Sections */
+    .content-section {
+      margin-bottom: 80px;
+      scroll-margin-top: 150px;
+    }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 24px;
+      color: var(--gray-900);
+    }
+
+    .section-text {
+      font-size: 16px;
+      color: var(--gray-700);
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    /* Cards */
+    .card {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 32px;
+      margin-bottom: 24px;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 24px;
+    }
+
+    .metric-card {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .metric-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--primary);
+      color: white;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin: 0 auto 16px;
+    }
+
+    .metric-value {
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 8px;
+    }
+
+    .metric-label {
+      font-size: 14px;
+      color: var(--gray-700);
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .tab {
+      padding: 12px 24px;
+      background: transparent;
+      border: none;
+      color: var(--gray-700);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .tab:hover,
+    .tab.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.3s;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Tech Stack */
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .tech-item {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .tech-item:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .tech-icon {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .tech-name {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--gray-700);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Code Block */
+    .code-container {
+      background: var(--gray-900);
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 24px 0;
+    }
+
+    .code-header {
+      background: var(--gray-800);
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .code-title {
+      font-size: 12px;
+      color: var(--gray-200);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .copy-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: var(--gray-200);
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 11px;
+      cursor: pointer;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .copy-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .code-block {
+      padding: 24px;
+      overflow-x: auto;
+    }
+
+    .code-block code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #e2e8f0;
+    }
+
+    .code-comment { color: #64748b; }
+    .code-keyword { color: #7dd3fc; }
+    .code-string { color: #86efac; }
+    .code-function { color: #fbbf24; }
+
+    /* Process Timeline */
+    .timeline {
+      position: relative;
+      padding-left: 40px;
+      margin-top: 32px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 8px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: var(--gray-200);
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 40px;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -36px;
+      top: 8px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--primary);
+      border: 3px solid white;
+      box-shadow: 0 0 0 3px var(--gray-200);
+    }
+
+    .timeline-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--primary);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .timeline-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--gray-900);
+      margin-bottom: 8px;
+    }
+
+    .timeline-text {
+      font-size: 14px;
+      color: var(--gray-700);
+      line-height: 1.6;
+    }
+
+    /* Lists */
+    .custom-list {
+      list-style: none;
+      padding: 0;
+      margin-top: 16px;
+    }
+
+    .custom-list li {
+      padding: 12px 0 12px 32px;
+      position: relative;
+      color: var(--gray-700);
+      line-height: 1.6;
+    }
+
+    .custom-list li::before {
+      content: "→";
+      position: absolute;
+      left: 0;
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: sticky;
+      top: 150px;
+      height: fit-content;
+    }
+
+    .sidebar-section {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .sidebar-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--gray-900);
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .sidebar-item {
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .sidebar-item:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .sidebar-label {
+      font-size: 11px;
+      color: var(--gray-700);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .sidebar-value {
+      font-size: 14px;
+      color: var(--gray-900);
+      font-weight: 500;
+    }
+
+    .tag-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .tag {
+      background: white;
+      border: 1px solid var(--gray-200);
+      padding: 4px 12px;
+      border-radius: 16px;
+      font-size: 11px;
+      color: var(--gray-700);
+      font-weight: 500;
+    }
+
+    .action-btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      background: var(--primary);
+      color: white;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 500;
+      font-size: 14px;
+      margin-bottom: 12px;
+      transition: all 0.2s;
+    }
+
+    .action-btn:hover {
+      background: var(--primary-dark);
+    }
+
+    .action-btn.secondary {
+      background: white;
+      color: var(--gray-700);
+      border: 1px solid var(--gray-200);
+    }
+
+    .action-btn.secondary:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* Highlight Box */
+    .highlight-box {
+      background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%);
+      border-left: 4px solid var(--primary);
+      border-radius: 8px;
+      padding: 24px 28px;
+      margin: 32px 0;
+    }
+
+    .highlight-box h3 {
+      font-size: 20px;
+      color: var(--gray-900);
+      margin-bottom: 12px;
+    }
+
+    .highlight-box p {
+      color: var(--gray-700);
+      line-height: 1.7;
+    }
+
+    /* Image Placeholder */
+    .image-placeholder {
+      width: 100%;
+      height: 400px;
+      background: linear-gradient(135deg, var(--gray-100) 0%, var(--gray-200) 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 80px;
+      margin: 32px 0;
+      border: 1px solid var(--gray-200);
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .main-container {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: relative;
+        top: 0;
+      }
+
+      .hero-title {
+        font-size: 40px;
+      }
+
+      .hero-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-container,
+      .hero-container,
+      .quick-nav-container,
+      .main-container {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .hero-title {
+        font-size: 32px;
+      }
+
+      .hero-stats {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+    }
+
+    /* Theme Variables */
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1e40af;
+      --bg-color: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #334155;
+      --nav-bg: rgba(255, 255, 255, 0.95);
+      --card-bg: #ffffff;
+      --card-border: #e2e8f0;
+      --hero-bg: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+      --stat-bg: #f8fafc;
+      --gray-50: #f8fafc;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --code-bg: #0f172a;
+    }
+
+    body.dark-mode {
+      --bg-color: #0f172a;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --nav-bg: rgba(15, 23, 42, 0.95);
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --hero-bg: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+      --stat-bg: #1e293b;
+      --gray-50: #1e293b;
+      --gray-100: #334155;
+      --gray-200: #334155;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-color);
+      color: var(--text-main);
+      line-height: 1.7;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    /* Navigation */
+    .nav {
+      position: sticky; top: 0;
+      background: var(--nav-bg);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--card-border);
+      z-index: 1000;
+    }
+    .nav-container {
+      max-width: 1400px; margin: 0 auto;
+      padding: 16px 40px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .nav-back {
+      display: flex; align-items: center; gap: 8px;
+      color: var(--text-muted); text-decoration: none;
+      font-size: 14px; font-weight: 500; padding: 8px 16px; border-radius: 8px;
+    }
+    .nav-back:hover { background: var(--gray-100); color: var(--primary); }
+    .nav-actions { display: flex; gap: 12px; }
+    .nav-btn {
+      padding: 8px 20px; border-radius: 8px; text-decoration: none;
+      font-size: 14px; font-weight: 500; transition: all 0.2s;
+      border: 1px solid var(--card-border); background: var(--card-bg);
+      color: var(--text-muted); cursor: pointer;
+    }
+    .nav-btn.primary { background: var(--primary); color: white; border-color: var(--primary); }
+
+    /* Hero */
+    .hero { background: var(--hero-bg); padding: 80px 40px 60px; }
+    .hero-container { max-width: 1200px; margin: 0 auto; }
+    .breadcrumb { display: flex; gap: 8px; color: var(--text-muted); font-size: 14px; margin-bottom: 24px; }
+    .hero-title { font-size: 56px; font-weight: 700; line-height: 1.1; margin-bottom: 24px; letter-spacing: -0.02em; }
+    .hero-subtitle { font-size: 20px; color: var(--text-muted); max-width: 800px; margin-bottom: 40px; }
+    .hero-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; max-width: 900px; }
+    .stat-value { font-size: 40px; font-weight: 700; color: var(--primary); display: block; }
+    .stat-label { font-size: 14px; color: var(--text-muted); font-weight: 500; }
+
+    /* Quick Nav */
+    .quick-nav { background: var(--nav-bg); border-bottom: 1px solid var(--card-border); position: sticky; top: 69px; z-index: 100; }
+    .quick-nav-container { max-width: 1400px; margin: 0 auto; padding: 0 40px; display: flex; gap: 32px; overflow-x: auto; }
+    .quick-nav a { padding: 16px 0; color: var(--text-muted); text-decoration: none; font-size: 14px; font-weight: 500; border-bottom: 2px solid transparent; }
+    .quick-nav a.active { color: var(--primary); border-bottom-color: var(--primary); }
+
+    /* Main Layout */
+    .main-container { max-width: 1400px; margin: 0 auto; padding: 60px 40px; display: grid; grid-template-columns: 1fr 320px; gap: 60px; }
+    .content-section { margin-bottom: 80px; scroll-margin-top: 150px; }
+    .section-label { font-size: 12px; font-weight: 600; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
+    .section-title { font-size: 32px; font-weight: 700; margin-bottom: 24px; }
+    .section-text { font-size: 16px; color: var(--text-muted); margin-bottom: 20px; }
+
+    /* UI Elements */
+    .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 32px; margin-bottom: 24px; }
+    .metric-card { background: var(--stat-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 24px; text-align: center; }
+    .metric-icon { width: 48px; height: 48px; background: var(--primary); color: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 24px; }
+    .highlight-box { background: var(--hero-bg); border-left: 4px solid var(--primary); border-radius: 8px; padding: 24px 28px; margin: 32px 0; }
+    .custom-list { list-style: none; }
+    .custom-list li { padding: 12px 0 12px 32px; position: relative; color: var(--text-muted); }
+    .custom-list li::before { content: "→"; position: absolute; left: 0; color: var(--primary); font-weight: 700; }
+
+    /* Timeline */
+    .timeline { position: relative; padding-left: 40px; margin-top: 32px; }
+    .timeline::before { content: ''; position: absolute; left: 8px; top: 8px; bottom: 8px; width: 2px; background: var(--card-border); }
+    .timeline-item { position: relative; margin-bottom: 40px; }
+    .timeline-item::before { content: ''; position: absolute; left: -36px; top: 8px; width: 16px; height: 16px; border-radius: 50%; background: var(--primary); border: 3px solid var(--bg-color); box-shadow: 0 0 0 3px var(--card-border); }
+
+    /* Tabs & Code */
+    .tabs { display: flex; gap: 4px; margin-bottom: 24px; border-bottom: 1px solid var(--card-border); }
+    .tab { padding: 12px 24px; background: transparent; border: none; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; }
+    .tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; animation: fadeIn 0.3s; }
+    .code-container { background: #0f172a; border-radius: 12px; overflow: hidden; margin: 24px 0; }
+    .code-header { background: #1e293b; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; }
+    .code-block { padding: 24px; overflow-x: auto; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+
+    /* Sidebar */
+    .sidebar-section { background: var(--stat-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 24px; margin-bottom: 24px; }
+    .tag { background: var(--card-bg); border: 1px solid var(--card-border); padding: 4px 12px; border-radius: 16px; font-size: 11px; color: var(--text-muted); }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 1024px) { .main-container { grid-template-columns: 1fr; } .hero-stats { grid-template-columns: repeat(2, 1fr); } }
+/* --- DARK MODE THEME LOGIC --- */
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1e40af;
+      --secondary: #7c3aed;
+      --accent: #06b6d4;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --dark: #0f172a;
+      --dark-light: #1e293b;
+      
+      /* Light Mode Colors */
+      --bg-body: #ffffff;
+      --bg-card: #ffffff;
+      --bg-alt: #f8fafc;
+      --nav-bg: rgba(255, 255, 255, 0.95);
+      --hero-bg: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+      --text-main: #0f172a;
+      --text-muted: #334155;
+      --border-color: #e2e8f0;
+      
+      --gray-50: #f8fafc;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --gray-700: #334155;
+      --gray-800: #1e293b;
+      --gray-900: #0f172a;
+    }
+
+    [data-theme="dark"] {
+      --bg-body: #0f172a;
+      --bg-card: #1e293b;
+      --bg-alt: #1e293b;
+      --nav-bg: rgba(15, 23, 42, 0.95);
+      --hero-bg: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --border-color: #334155;
+      --gray-50: #1e293b;
+      --gray-100: #334155;
+      --gray-200: #334155;
+      --gray-700: #94a3b8;
+      --gray-900: #f8fafc;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-body);
+      color: var(--text-main);
+      line-height: 1.7;
+    }
+
+    /* Navigation */
+    .nav {
+      position: sticky;
+      top: 0;
+      background: var(--nav-bg);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-color);
+      z-index: 1000;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+    .nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 16px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-back {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 8px;
+    }
+    .nav-back:hover {
+      background: var(--gray-100);
+      color: var(--primary);
+    }
+    .nav-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .nav-btn {
+      padding: 8px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      border: 1px solid var(--border-color);
+      background: var(--bg-card);
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+    .nav-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .nav-btn.primary {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+    .nav-btn.primary:hover {
+      background: var(--primary-dark);
+    }
+
+    /* Hero Section */
+    .hero {
+      background: var(--hero-bg);
+      padding: 80px 40px 60px;
+    }
+    .hero-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .breadcrumb {
+      display: flex;
+      gap: 8px;
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+    .hero-title {
+      font-size: 56px;
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 24px;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+    }
+    .hero-subtitle {
+      font-size: 20px;
+      color: var(--text-muted);
+      max-width: 800px;
+      line-height: 1.6;
+      margin-bottom: 40px;
+    }
+    .stat-value {
+      font-size: 40px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 8px;
+      display: block;
+    }
+    .stat-label {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* Quick Nav */
+    .quick-nav {
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 69px;
+      z-index: 100;
+    }
+    .quick-nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 40px;
+      display: flex;
+      gap: 32px;
+      overflow-x: auto;
+    }
+    .quick-nav a {
+      padding: 16px 0;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+    }
+    .quick-nav a:hover, .quick-nav a.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    /* Main Layout */
+    .main-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 60px 40px;
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 60px;
+    }
+
+    /* Content Sections */
+    .content-section { margin-bottom: 80px; scroll-margin-top: 150px; }
+    .section-label { font-size: 12px; font-weight: 600; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
+    .section-title { font-size: 32px; font-weight: 700; margin-bottom: 24px; color: var(--text-main); }
+    .section-text { font-size: 16px; color: var(--text-muted); line-height: 1.8; margin-bottom: 20px; }
+
+    /* Cards */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 32px;
+      margin-bottom: 24px;
+    }
+    .metric-card {
+      background: var(--bg-alt);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+    }
+    .metric-value { font-size: 36px; font-weight: 700; color: var(--text-main); margin-bottom: 8px; }
+    .metric-label { font-size: 14px; color: var(--text-muted); }
+
+    /* Tabs */
+    .tabs { display: flex; gap: 4px; margin-bottom: 24px; border-bottom: 1px solid var(--border-color); }
+    .tab {
+      padding: 12px 24px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+    }
+    .tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+    .tab-content { display: none; animation: fadeIn 0.3s; }
+    .tab-content.active { display: block; }
+
+    /* Tech Stack */
+    .tech-item { background: var(--bg-alt); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; text-align: center; }
+    .tech-name { font-size: 12px; font-weight: 500; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
+
+    /* Code Block (Always Dark) */
+    .code-container { background: #0f172a; border-radius: 12px; overflow: hidden; margin: 24px 0; }
+    .code-header { background: #1e293b; padding: 12px 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+
+    /* Timeline */
+    .timeline::before { background: var(--border-color); }
+    .timeline-title { color: var(--text-main); }
+    .timeline-text { color: var(--text-muted); }
+
+    /* Sidebar */
+    .sidebar-section { background: var(--bg-alt); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; margin-bottom: 24px; }
+    .sidebar-title { color: var(--text-main); }
+    .sidebar-value { color: var(--text-main); }
+    .sidebar-label { color: var(--text-muted); }
+    .tag { background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-muted); }
+
+    /* Highlight Box */
+    .highlight-box {
+      background: var(--hero-bg);
+      border-left: 4px solid var(--primary);
+      border-radius: 8px;
+      padding: 24px 28px;
+      margin: 32px 0;
+    }
+    .highlight-box h3 { color: var(--text-main); }
+
+    /* Placeholders */
+    .image-placeholder {
+      background: var(--bg-alt);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+    }
+
+    /* Utils */
+    .hero-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; max-width: 900px; }
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-top: 24px; }
+    .timeline { position: relative; padding-left: 40px; margin-top: 32px; }
+    .timeline-item { position: relative; margin-bottom: 40px; }
+    .custom-list { list-style: none; }
+    .custom-list li { padding: 12px 0 12px 32px; position: relative; color: var(--text-muted); }
+    .custom-list li::before { content: "→"; position: absolute; left: 0; color: var(--primary); font-weight: 700; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 1024px) {
+      .main-container { grid-template-columns: 1fr; }
+      .hero-title { font-size: 40px; }
+      .hero-stats { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-back">
+        ← Back to Portfolio
+      </a>
+      <div class="nav-actions">
+        <button id="theme-toggle" class="nav-btn" aria-label="Toggle Dark Mode">
+          <span id="theme-icon">🌙</span>
+        </button>
+        <a href="#" class="nav-btn">View Code</a>
+        <a href="#contact" class="nav-btn primary">Get in Touch</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-container">
+      <div class="breadcrumb">
+        <span>Projects</span>
+        <span>/</span>
+        <span>Machine Learning</span>
+        <span>/</span>
+        <span>Forecasting</span>
+      </div>
+      <h1 class="hero-title">Predictive Sales Forecasting Engine</h1>
+      <p class="hero-subtitle">
+        Developed an advanced LSTM-based forecasting system that predicts quarterly sales with 95% accuracy, reducing inventory costs by 30% and enabling data-driven strategic planning for a major retail technology company.
+      </p>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-value">95%</span>
+          <span class="stat-label">Forecast Accuracy</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">$2.1M</span>
+          <span class="stat-label">Annual Cost Savings</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">30%</span>
+          <span class="stat-label">Inventory Reduction</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">12 wks</span>
+          <span class="stat-label">Project Timeline</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Navigation -->
+  <nav class="quick-nav">
+    <div class="quick-nav-container">
+      <a href="#overview" class="active">Overview</a>
+      <a href="#challenge">The Challenge</a>
+      <a href="#approach">Approach</a>
+      <a href="#technical">Technical Details</a>
+      <a href="#results">Results</a>
+      <a href="#learnings">Key Learnings</a>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="main-container">
+    
+    <!-- Left Column: Main Content -->
+    <main>
+
+      <!-- Overview -->
+      <section id="overview" class="content-section">
+        <div class="section-label">Project Overview</div>
+        <h2 class="section-title">Transforming Sales Planning Through Machine Learning</h2>
+        <p class="section-text">
+          A Fortune 500 retail technology company was struggling with outdated forecasting methods that relied on simple moving averages and manual adjustments. This resulted in frequent stockouts during peak seasons and significant inventory waste during slower periods.
+        </p>
+        <p class="section-text">
+          I was brought in to design and implement a modern, ML-powered forecasting system that could accurately predict demand across 200+ product categories, accounting for seasonality, promotions, economic indicators, and market trends.
+        </p>
+
+        <div class="highlight-box">
+          <h3>Business Impact</h3>
+          <p>
+            The forecasting engine processes 5 years of historical data, external market signals, and promotional calendars to generate rolling 12-month forecasts with 95% accuracy. This has fundamentally transformed how the company approaches inventory management and strategic planning.
+          </p>
+        </div>
+
+        <div class="card-grid">
+          <div class="metric-card">
+            <div class="metric-icon">📊</div>
+            <div class="metric-value">200+</div>
+            <div class="metric-label">Product Categories</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon">⚡</div>
+            <div class="metric-value">5 years</div>
+            <div class="metric-label">Historical Data</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon">🎯</div>
+            <div class="metric-value">85%</div>
+            <div class="metric-label">Time Saved</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- The Challenge -->
+      <section id="challenge" class="content-section">
+        <div class="section-label">Problem Statement</div>
+        <h2 class="section-title">The Challenge</h2>
+        <p class="section-text">
+          The existing forecasting process presented several critical challenges that were impacting the company's bottom line:
+        </p>
+
+        <div class="card">
+          <ul class="custom-list">
+            <li><strong>Inventory Waste:</strong> 30% of stock was becoming obsolete due to over-ordering based on inaccurate forecasts</li>
+            <li><strong>Stockout Losses:</strong> Under-forecasting led to frequent stockouts during peak seasons, resulting in estimated revenue loss of $5M annually</li>
+            <li><strong>Manual Process:</strong> Quarterly forecasts required 2+ weeks of manual data compilation and analysis by a team of 5 analysts</li>
+            <li><strong>Limited Features:</strong> Existing models only considered historical sales data, ignoring promotions, seasonality, and economic factors</li>
+            <li><strong>Category Complexity:</strong> Different product categories exhibited vastly different patterns that weren't being captured</li>
+            <li><strong>Forecast Latency:</strong> By the time forecasts were complete, they were already outdated</li>
+          </ul>
+        </div>
+
+        <div class="image-placeholder">📉</div>
+      </section>
+
+      <!-- Approach -->
+      <section id="approach" class="content-section">
+        <div class="section-label">Methodology</div>
+        <h2 class="section-title">Solution Approach</h2>
+        
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-label">Phase 1: Discovery</div>
+            <div class="timeline-title">Data Collection & Analysis</div>
+            <div class="timeline-text">
+              Aggregated 5 years of sales data, promotional calendars, economic indicators, seasonal variables, and competitive intelligence. Performed extensive EDA to understand patterns, outliers, and correlations.
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-label">Phase 2: Feature Engineering</div>
+            <div class="timeline-title">Building Predictive Features</div>
+            <div class="timeline-text">
+              Created 50+ engineered features including lag variables, rolling statistics, seasonal decomposition, promotional indicators, and external economic signals. Applied domain expertise to capture retail-specific patterns.
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-label">Phase 3: Model Development</div>
+            <div class="timeline-title">Ensemble Architecture</div>
+            <div class="timeline-text">
+              Developed a hybrid ensemble combining LSTM neural networks for temporal dependencies, XGBoost for non-linear relationships, and ARIMA for baseline comparison. Implemented custom weighting based on forecast horizon.
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-label">Phase 4: Validation</div>
+            <div class="timeline-title">Rigorous Testing</div>
+            <div class="timeline-text">
+              Applied time-series cross-validation with 5 splits to prevent data leakage. Tested against multiple metrics (MAPE, RMSE, MAE) and validated against actual business outcomes over a 6-month pilot period.
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-label">Phase 5: Deployment</div>
+            <div class="timeline-title">Production Pipeline</div>
+            <div class="timeline-text">
+              Deployed as microservices using Docker and Kubernetes on AWS. Built automated retraining pipelines, real-time monitoring dashboards, and alert systems. Created user-friendly interfaces for business stakeholders.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Technical Details -->
+      <section id="technical" class="content-section">
+        <div class="section-label">Technical Implementation</div>
+        <h2 class="section-title">Technical Deep Dive</h2>
+
+        <div class="tabs">
+          <button class="tab active" onclick="switchTab(event, 'tab1')">Architecture</button>
+          <button class="tab" onclick="switchTab(event, 'tab2')">Data Pipeline</button>
+          <button class="tab" onclick="switchTab(event, 'tab3')">Model Training</button>
+          <button class="tab" onclick="switchTab(event, 'tab4')">Deployment</button>
+        </div>
+
+        <div id="tab1" class="tab-content active">
+          <p class="section-text">
+            The forecasting engine uses a sophisticated ensemble architecture that combines the strengths of multiple algorithms:
+          </p>
+
+          <div class="code-container">
+            <div class="code-header">
+              <span class="code-title">model_architecture.py</span>
+              <button class="copy-btn">Copy</button>
+            </div>
+            <div class="code-block">
+              <code><span class="code-comment"># Ensemble forecasting architecture</span>
+<span class="code-keyword">class</span> <span class="code-function">SalesForecastEnsemble</span>:
+    <span class="code-keyword">def</span> <span class="code-function">__init__</span>(self):
+        self.lstm_model = self.<span class="code-function">build_lstm</span>()
+        self.xgb_model = <span class="code-function">XGBRegressor</span>(n_estimators=<span class="code-string">500</span>)
+        self.arima_models = {}
+        
+    <span class="code-keyword">def</span> <span class="code-function">build_lstm</span>(self):
+        model = Sequential([
+            LSTM(<span class="code-string">128</span>, return_sequences=<span class="code-keyword">True</span>, input_shape=(lookback, features)),
+            Dropout(<span class="code-string">0.2</span>),
+            LSTM(<span class="code-string">64</span>),
+            Dense(<span class="code-string">32</span>, activation=<span class="code-string">'relu'</span>),
+            Dense(<span class="code-string">1</span>)
+        ])
+        <span class="code-keyword">return</span> model
+    
+    <span class="code-keyword">def</span> <span class="code-function">predict</span>(self, X):
+        <span class="code-comment"># Weighted ensemble prediction</span>
+        lstm_pred = self.lstm_model.<span class="code-function">predict</span>(X) * <span class="code-string">0.5</span>
+        xgb_pred = self.xgb_model.<span class="code-function">predict</span>(X) * <span class="code-string">0.35</span>
+        arima_pred = self.<span class="code-function">get_arima_forecast</span>(X) * <span class="code-string">0.15</span>
+        <span class="code-keyword">return</span> lstm_pred + xgb_pred + arima_pred</code>
+            </div>
+          </div>
+
+          <p class="section-text">
+            The ensemble approach provides robustness against model-specific weaknesses and adapts to different forecast horizons. LSTM excels at capturing long-term temporal patterns, XGBoost handles non-linear feature interactions, and ARIMA provides a reliable baseline for short-term forecasts.
+          </p>
+        </div>
+
+        <div id="tab2" class="tab-content">
+          <p class="section-text">
+            Built a robust, scalable data pipeline that automatically ingests, validates, transforms, and prepares data for model training and inference:
+          </p>
+
+          <div class="code-container">
+            <div class="code-header">
+              <span class="code-title">data_pipeline.py</span>
+              <button class="copy-btn">Copy</button>
+            </div>
+            <div class="code-block">
+              <code><span class="code-comment"># ETL Pipeline for sales forecasting</span>
+<span class="code-keyword">class</span> <span class="code-function">DataPipeline</span>:
+    <span class="code-keyword">def</span> <span class="code-function">extract</span>(self):
+        <span class="code-comment"># Pull from multiple sources</span>
+        sales_data = self.<span class="code-function">query_database</span>(<span class="code-string">'SELECT * FROM sales'</span>)
+        promo_data = self.<span class="code-function">fetch_s3</span>(<span class="code-string">'promotions.csv'</span>)
+        economic_data = self.<span class="code-function">call_api</span>(<span class="code-string">'external/economics'</span>)
+        <span class="code-keyword">return</span> sales_data, promo_data, economic_data
+    
+    <span class="code-keyword">def</span> <span class="code-function">transform</span>(self, data):
+        <span class="code-comment"># Feature engineering</span>
+        df = pd.<span class="code-function">merge</span>(sales_data, promo_data, on=<span class="code-string">'date'</span>)
+        df[<span class="code-string">'rolling_mean_7d'</span>] = df[<span class="code-string">'sales'</span>].<span class="code-function">rolling</span>(<span class="code-string">7</span>).mean()
+        df[<span class="code-string">'lag_1'</span>] = df[<span class="code-string">'sales'</span>].<span class="code-function">shift</span>(<span class="code-string">1</span>)
+        df[<span class="code-string">'is_holiday'</span>] = df[<span class="code-string">'date'</span>].<span class="code-function">apply</span>(self.check_holiday)
+        <span class="code-keyword">return</span> self.<span class="code-function">handle_missing</span>(df)
+    
+    <span class="code-keyword">def</span> <span class="code-function">load</span>(self, processed_data):
+        <span class="code-comment"># Store in feature store</span>
+        self.<span class="code-function">write_to_feature_store</span>(processed_data)
+        self.<span class="code-function">update_metadata</span>(timestamp=datetime.now())</code>
+            </div>
+          </div>
+
+          <ul class="custom-list">
+            <li><strong>Data Sources:</strong> PostgreSQL database, S3 buckets, external APIs for economic indicators</li>
+            <li><strong>Validation:</strong> Schema checks, outlier detection, data quality metrics logged to CloudWatch</li>
+            <li><strong>Feature Store:</strong> Centralized feature repository using AWS SageMaker Feature Store</li>
+            <li><strong>Orchestration:</strong> Apache Airflow DAGs running on hourly schedule with failure alerts</li>
+            <li><strong>Monitoring:</strong> Data drift detection, missing value alerts, distribution shift monitoring</li>
+          </ul>
+        </div>
+
+        <div id="tab3" class="tab-content">
+          <p class="section-text">
+            Model training process optimized for both accuracy and computational efficiency:
+          </p>
+
+          <div class="code-container">
+            <div class="code-header">
+              <span class="code-title">training.py</span>
+              <button class="copy-btn">Copy</button>
+            </div>
+            <div class="code-block">
+              <code><span class="code-comment"># Training pipeline with cross-validation</span>
+<span class="code-keyword">def</span> <span class="code-function">train_model</span>(X_train, y_train):
+    <span class="code-comment"># Time series cross-validation</span>
+    tscv = <span class="code-function">TimeSeriesSplit</span>(n_splits=<span class="code-string">5</span>)
+    
+    <span class="code-comment"># Hyperparameter optimization</span>
+    study = optuna.<span class="code-function">create_study</span>(direction=<span class="code-string">'minimize'</span>)
+    study.<span class="code-function">optimize</span>(objective, n_trials=<span class="code-string">100</span>)
+    
+    <span class="code-comment"># Train final model</span>
+    best_params = study.best_params
+    model = <span class="code-function">SalesForecastEnsemble</span>(**best_params)
+    
+    <span class="code-keyword">for</span> train_idx, val_idx <span class="code-keyword">in</span> tscv.<span class="code-function">split</span>(X_train):
+        X_t, X_v = X_train[train_idx], X_train[val_idx]
+        y_t, y_v = y_train[train_idx], y_train[val_idx]
+        
+        model.<span class="code-function">fit</span>(X_t, y_t, 
+                  validation_data=(X_v, y_v),
+                  callbacks=[early_stopping, checkpoint])
+        
+        <span class="code-comment"># Log metrics</span>
+        mape = <span class="code-function">mean_absolute_percentage_error</span>(y_v, model.<span class="code-function">predict</span>(X_v))
+        mlflow.<span class="code-function">log_metric</span>(<span class="code-string">'mape'</span>, mape)
+    
+    <span class="code-keyword">return</span> model</code>
+            </div>
+          </div>
+
+          <ul class="custom-list">
+            <li><strong>Cross-Validation:</strong> 5-fold time-series split to prevent data leakage and validate temporal generalization</li>
+            <li><strong>Hyperparameter Tuning:</strong> Bayesian optimization using Optuna (100 trials, TPE sampler)</li>
+            <li><strong>Training Infrastructure:</strong> Distributed training on AWS EC2 p3.2xlarge instances (GPU-accelerated)</li>
+            <li><strong>Experiment Tracking:</strong> MLflow for versioning models, parameters, metrics, and artifacts</li>
+            <li><strong>Model Registry:</strong> Centralized registry with staging/production promotion workflow</li>
+            <li><strong>Performance Metrics:</strong> MAPE, RMSE, MAE, directional accuracy tracked across all categories</li>
+          </ul>
+
+          <div class="image-placeholder">📈</div>
+        </div>
+
+        <div id="tab4" class="tab-content">
+          <p class="section-text">
+            Production deployment designed for reliability, scalability, and continuous improvement:
+          </p>
+
+          <div class="code-container">
+            <div class="code-header">
+              <span class="code-title">deployment.py</span>
+              <button class="copy-btn">Copy</button>
+            </div>
+            <div class="code-block">
+              <code><span class="code-comment"># FastAPI inference endpoint</span>
+<span class="code-keyword">from</span> fastapi <span class="code-keyword">import</span> FastAPI
+<span class="code-keyword">import</span> joblib
+
+app = <span class="code-function">FastAPI</span>()
+model = joblib.<span class="code-function">load</span>(<span class="code-string">'model.pkl'</span>)
+
+<span class="code-keyword">@app.post</span>(<span class="code-string">"/predict"</span>)
+<span class="code-keyword">async def</span> <span class="code-function">predict</span>(request: ForecastRequest):
+    <span class="code-comment"># Validate input</span>
+    features = <span class="code-function">extract_features</span>(request)
+    
+    <span class="code-comment"># Generate forecast</span>
+    prediction = model.<span class="code-function">predict</span>(features)
+    confidence = model.<span class="code-function">predict_interval</span>(features, alpha=<span class="code-string">0.05</span>)
+    
+    <span class="code-comment"># Log prediction</span>
+    <span class="code-function">log_inference</span>(request, prediction)
+    
+    <span class="code-keyword">return</span> {
+        <span class="code-string">"forecast"</span>: prediction,
+        <span class="code-string">"confidence_interval"</span>: confidence,
+        <span class="code-string">"timestamp"</span>: datetime.<span class="code-function">now</span>()
+    }</code>
+            </div>
+          </div>
+
+          <ul class="custom-list">
+            <li><strong>API Framework:</strong> FastAPI with async support, automatic OpenAPI documentation, request validation</li>
+            <li><strong>Containerization:</strong> Docker images with multi-stage builds, optimized for size and security</li>
+            <li><strong>Orchestration:</strong> Kubernetes cluster with horizontal pod autoscaling (2-10 replicas)</li>
+            <li><strong>Load Balancing:</strong> AWS Application Load Balancer with health checks and auto-recovery</li>
+            <li><strong>Monitoring:</strong> Prometheus metrics, Grafana dashboards, PagerDuty alerts for anomalies</li>
+            <li><strong>CI/CD:</strong> GitHub Actions pipeline with automated testing, staging deployment, and canary releases</li>
+            <li><strong>Model Updates:</strong> Automated retraining every 2 weeks with A/B testing before production rollout</li>
+          </ul>
+
+          <div class="image-placeholder">🚀</div>
+        </div>
+
+        <div class="tech-grid" style="margin-top: 40px;">
+          <div class="tech-item">
+            <div class="tech-icon">🐍</div>
+            <div class="tech-name">Python 3.9</div>
+          </div>
+          <div class="tech-item">
+            <div class="tech-icon">🧠</div>
+            <div class="tech-name">TensorFlow</div>
+          </div>
+          <div class="tech-item">
+            <div class="tech-icon">📊</div>
+            <div class="tech-name">Pandas</div>
+          </div>
+          <div class="tech-item">
+            <div class="tech-icon">⚡</div>
+            <div class="tech-name">XGBoost</div>
+          </div>
+          <div class="tech-item">
+            <div class="tech-icon">🔮</div>
+            <div class="tech-name">Optuna</div>
+          </div>
+          <div class="tech-item">
+            <div class="tech-icon">🚀</div>
+            <div class="tech-name">FastAPI</div>
+          </div>
+          <div class="tech-item">
+            <div class="tech-icon">🐳</div>
+            <div class="tech-name">Docker</div>
+          </div>
+          <div class="tech-item">
+            <div class="tech-icon">☸️</div>
+            <div class="tech-name">Kubernetes</div>
+          </div>
+          <div class="tech-item">
+            <div class="tech-icon">☁️</div>
+            <div class="tech-name">AWS</div>
+          </div>
+          <div class="tech-item">
+            <div class="tech-icon">📈</div>
+            <div class="tech-name">MLflow</div>
+          </div>
+          <div class="tech-item">
+            <div class="tech-icon">🌊</div>
+            <div class="tech-name">Airflow</div>
+          </div>
+          <div class="tech-item">
+            <div class="tech-icon">📉</div>
+            <div class="tech-name">Plotly</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Results -->
+      <section id="results" class="content-section">
+        <div class="section-label">Impact & Outcomes</div>
+        <h2 class="section-title">Results & Business Impact</h2>
+        
+        <p class="section-text">
+          The forecasting engine has been in production for 8 months and has consistently delivered exceptional results, fundamentally transforming how the company approaches inventory management and strategic planning.
+        </p>
+
+        <div class="card-grid">
+          <div class="metric-card">
+            <div class="metric-icon">🎯</div>
+            <div class="metric-value">95.2%</div>
+            <div class="metric-label">Forecast Accuracy (MAPE)</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon">💰</div>
+            <div class="metric-value">$2.1M</div>
+            <div class="metric-label">Annual Cost Savings</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon">📦</div>
+            <div class="metric-value">30%</div>
+            <div class="metric-label">Inventory Reduction</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon">⚡</div>
+            <div class="metric-value">85%</div>
+            <div class="metric-label">Time Savings</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon">📈</div>
+            <div class="metric-value">22%</div>
+            <div class="metric-label">Stockout Reduction</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon">🔄</div>
+            <div class="metric-value">2 hrs</div>
+            <div class="metric-label">Forecast Generation Time</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size: 20px; margin-bottom: 16px; color: var(--gray-900);">Detailed Impact Analysis</h3>
+          
+          <div style="margin-bottom: 24px;">
+            <strong style="color: var(--primary);">Financial Impact</strong>
+            <ul class="custom-list">
+              <li>Reduced inventory holding costs by $1.4M annually through accurate demand prediction</li>
+              <li>Prevented $700K in lost revenue from stockouts during Q4 peak season</li>
+              <li>Optimized promotional spend by identifying high-impact opportunities ($450K savings)</li>
+              <li>Total ROI of 420% within first year of deployment</li>
+            </ul>
+          </div>
+
+          <div style="margin-bottom: 24px;">
+            <strong style="color: var(--primary);">Operational Improvements</strong>
+            <ul class="custom-list">
+              <li>Automated forecasting reduced analyst workload from 80 hours/month to 12 hours/month</li>
+              <li>Forecast generation time decreased from 2 weeks to 2 hours (98.5% reduction)</li>
+              <li>Enabled real-time decision making with daily forecast updates vs quarterly updates</li>
+              <li>Improved cross-functional collaboration with transparent, data-driven insights</li>
+            </ul>
+          </div>
+
+          <div>
+            <strong style="color: var(--primary);">Strategic Advantages</strong>
+            <ul class="custom-list">
+              <li>Enhanced agility to respond to market changes and competitive pressures</li>
+              <li>Enabled data-driven expansion into 3 new product categories with confidence</li>
+              <li>Improved supplier relationships through accurate, long-term volume forecasts</li>
+              <li>Created foundation for advanced analytics initiatives (pricing optimization, assortment planning)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="highlight-box">
+          <h3>Client Testimonial</h3>
+          <p>
+            "This forecasting system has been transformational for our business. We've gone from making gut-feel decisions to data-driven strategies. The accuracy is remarkable, but more importantly, it's given us the confidence to be more aggressive in our growth plans while simultaneously reducing risk." 
+            <br><br>
+            <em>— VP of Operations, Tech Retail Corp</em>
+          </p>
+        </div>
+
+        <div class="image-placeholder">📊</div>
+      </section>
+
+      <!-- Key Learnings -->
+      <section id="learnings" class="content-section">
+        <div class="section-label">Insights & Reflections</div>
+        <h2 class="section-title">Key Learnings</h2>
+        
+        <p class="section-text">
+          This project provided invaluable insights into building production-grade ML systems and navigating the complexities of enterprise deployment. Here are the key takeaways:
+        </p>
+
+        <div class="card">
+          <h3 style="font-size: 18px; margin-bottom: 16px; color: var(--gray-900);">1. Feature Engineering > Model Complexity</h3>
+          <p class="section-text">
+            The biggest performance gains came from thoughtful feature engineering rather than complex model architectures. Domain-specific features like "days until next promotion" and "historical same-week-of-year sales" improved accuracy by 12 percentage points, while switching from a simpler to more complex neural network architecture only gained 2 points.
+          </p>
+          <p class="section-text" style="margin-top: 12px;">
+            <strong>Lesson:</strong> Invest heavily in understanding the domain and creating meaningful features before optimizing model architecture.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size: 18px; margin-bottom: 16px; color: var(--gray-900);">2. Ensemble Methods Provide Robustness</h3>
+          <p class="section-text">
+            No single model performed well across all scenarios. LSTM excelled at long-term trends, XGBoost handled sudden promotional spikes, and ARIMA was reliable for short-term forecasts. The ensemble approach reduced variance and provided consistent performance.
+          </p>
+          <p class="section-text" style="margin-top: 12px;">
+            <strong>Lesson:</strong> For business-critical applications, ensemble methods offer reliability that single models cannot match.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size: 18px; margin-bottom: 16px; color: var(--gray-900);">3. Model Drift is Inevitable</h3>
+          <p class="section-text">
+            Within 6 weeks of deployment, we detected significant drift in prediction accuracy due to an unexpected market shift. Our monitoring system caught this early, triggering automatic retraining. Without continuous monitoring, accuracy would have degraded from 95% to 78%.
+          </p>
+          <p class="section-text" style="margin-top: 12px;">
+            <strong>Lesson:</strong> Build comprehensive monitoring and automated retraining from day one. Models degrade over time.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size: 18px; margin-bottom: 16px; color: var(--gray-900);">4. Explainability Builds Trust</h3>
+          <p class="section-text">
+            Initial stakeholder skepticism was overcome not by showing model accuracy, but by explaining *why* the model made specific predictions. SHAP values and feature importance visualizations were crucial for adoption. Business users needed to understand the "why" behind predictions.
+          </p>
+          <p class="section-text" style="margin-top: 12px;">
+            <strong>Lesson:</strong> Model interpretability is as important as accuracy for enterprise adoption.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size: 18px; margin-bottom: 16px; color: var(--gray-900);">5. Incremental Rollout Reduces Risk</h3>
+          <p class="section-text">
+            We started with a pilot on 3 product categories before full deployment. This uncovered edge cases and data quality issues that would have caused problems at scale. The pilot phase validated our approach and built confidence across the organization.
+          </p>
+          <p class="section-text" style="margin-top: 12px;">
+            <strong>Lesson:</strong> Always pilot ML systems with a small scope before full deployment. The learning is worth the extra time.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size: 18px; margin-bottom: 16px; color: var(--gray-900);">6. Infrastructure Matters</h3>
+          <p class="section-text">
+            Building robust data pipelines, automated testing, and deployment automation took 40% of project time but prevented countless production issues. The temptation to skip infrastructure work would have been costly.
+          </p>
+          <p class="section-text" style="margin-top: 12px;">
+            <strong>Lesson:</strong> Invest in MLOps infrastructure early. The time saved in debugging and maintenance pays back quickly.
+          </p>
+        </div>
+
+        <div class="highlight-box">
+          <h3>Future Enhancements</h3>
+          <p>
+            Based on the success of this project, we're exploring several enhancements:
+          </p>
+          <ul class="custom-list" style="margin-top: 12px;">
+            <li>Incorporating real-time web traffic and social media sentiment for early demand signals</li>
+            <li>Expanding to SKU-level forecasts (currently at category level)</li>
+            <li>Building causal inference models to optimize promotional strategy</li>
+            <li>Integrating weather data for weather-sensitive product categories</li>
+            <li>Developing transfer learning approaches for new product launches</li>
+          </ul>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <h3 class="sidebar-title">Project Info</h3>
+        
+        <div class="sidebar-item">
+          <div class="sidebar-label">Client</div>
+          <div class="sidebar-value">Tech Retail Corp</div>
+        </div>
+
+        <div class="sidebar-item">
+          <div class="sidebar-label">Industry</div>
+          <div class="sidebar-value">Retail Technology</div>
+        </div>
+
+        <div class="sidebar-item">
+          <div class="sidebar-label">Duration</div>
+          <div class="sidebar-value">12 Weeks</div>
+        </div>
+
+        <div class="sidebar-item">
+          <div class="sidebar-label">Year</div>
+          <div class="sidebar-value">2024</div>
+        </div>
+
+        <div class="sidebar-item">
+          <div class="sidebar-label">Team</div>
+          <div class="sidebar-value">Lead Data Scientist<br>1 ML Engineer<br>1 DevOps Engineer</div>
+        </div>
+
+        <div class="sidebar-item">
+          <div class="sidebar-label">Status</div>
+          <div class="sidebar-value">✅ Production</div>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <h3 class="sidebar-title">Tags</h3>
+        <div class="tag-container">
+          <span class="tag">Machine Learning</span>
+          <span class="tag">Time Series</span>
+          <span class="tag">Deep Learning</span>
+          <span class="tag">LSTM</span>
+          <span class="tag">Forecasting</span>
+          <span class="tag">Python</span>
+          <span class="tag">TensorFlow</span>
+          <span class="tag">XGBoost</span>
+          <span class="tag">MLOps</span>
+          <span class="tag">AWS</span>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <h3 class="sidebar-title">Actions</h3>
+        <a href="https://github.com" class="action-btn" target="_blank">
+          View Code on GitHub
+        </a>
+        <a href="#" class="action-btn secondary">
+          Download Case Study PDF
+        </a>
+        <a href="../index.html" class="action-btn secondary">
+          ← Back to Portfolio
+        </a>
+      </div>
+
+      <div class="sidebar-section">
+        <h3 class="sidebar-title">Share Project</h3>
+        <div style="display: flex; gap: 8px;">
+          <a href="#" class="action-btn secondary" style="flex: 1; padding: 10px; font-size: 18px;">🔗</a>
+          <a href="#" class="action-btn secondary" style="flex: 1; padding: 10px; font-size: 18px;">📧</a>
+          <a href="#" class="action-btn secondary" style="flex: 1; padding: 10px; font-size: 18px;">💼</a>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+
+  <script>
+    // --- THEME TOGGLE SCRIPT ---
+    const toggleBtn = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const htmlElement = document.documentElement;
+
+    // Load saved preference
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    if (savedTheme === 'dark') {
+      htmlElement.setAttribute('data-theme', 'dark');
+      themeIcon.textContent = '☀️';
+    }
+
+    toggleBtn.addEventListener('click', () => {
+      const currentTheme = htmlElement.getAttribute('data-theme');
+      if (currentTheme === 'dark') {
+        htmlElement.removeAttribute('data-theme');
+        themeIcon.textContent = '🌙';
+        localStorage.setItem('theme', 'light');
+      } else {
+        htmlElement.setAttribute('data-theme', 'dark');
+        themeIcon.textContent = '☀️';
+        localStorage.setItem('theme', 'dark');
+      }
+    });
+
+    // --- TAB SWITCH SCRIPT ---
+    function switchTab(evt, tabName) {
+      const contents = document.getElementsByClassName("tab-content");
+      for (let i = 0; i < contents.length; i++) contents[i].style.display = "none";
+      const tabs = document.getElementsByClassName("tab");
+      for (let i = 0; i < tabs.length; i++) tabs[i].classList.remove("active");
+      document.getElementById(tabName).style.display = "block";
+      evt.currentTarget.classList.add("active");
+    }
+  </script>
+
+</body>
+</html>

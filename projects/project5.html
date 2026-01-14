@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E-commerce SQL Analysis | Case Study</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1e40af;
+      --secondary: #7c3aed;
+      --accent: #06b6d4;
+      --success: #10b981;
+      --warning: #f59e0b;
+      
+      /* Light Mode Colors */
+      --bg-body: #ffffff;
+      --bg-card: #ffffff;
+      --bg-alt: #f8fafc;
+      --nav-bg: rgba(255, 255, 255, 0.95);
+      --hero-bg: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+      --text-main: #0f172a;
+      --text-muted: #334155;
+      --border-color: #e2e8f0;
+      
+      --gray-50: #f8fafc;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --gray-700: #334155;
+      --gray-800: #1e293b;
+      --gray-900: #0f172a;
+    }
+
+    [data-theme="dark"] {
+      --bg-body: #0f172a;
+      --bg-card: #1e293b;
+      --bg-alt: #1e293b;
+      --nav-bg: rgba(15, 23, 42, 0.95);
+      --hero-bg: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --border-color: #334155;
+      --gray-50: #1e293b;
+      --gray-100: #334155;
+      --gray-200: #334155;
+      --gray-700: #94a3b8;
+      --gray-900: #f8fafc;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-body);
+      color: var(--text-main);
+      line-height: 1.7;
+    }
+
+    /* Navigation */
+    .nav {
+      position: sticky;
+      top: 0;
+      background: var(--nav-bg);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-color);
+      z-index: 1000;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 16px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-back {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 8px;
+    }
+
+    .nav-back:hover {
+      background: var(--gray-100);
+      color: var(--primary);
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .nav-btn {
+      padding: 8px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      border: 1px solid var(--border-color);
+      background: var(--bg-card);
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    .nav-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .nav-btn.primary {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .nav-btn.primary:hover {
+      background: var(--primary-dark);
+    }
+
+    /* Hero Section */
+    .hero {
+      background: var(--hero-bg);
+      padding: 80px 40px 60px;
+    }
+
+    .hero-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .breadcrumb {
+      display: flex;
+      gap: 8px;
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    .hero-title {
+      font-size: 56px;
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 24px;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+    }
+
+    .hero-subtitle {
+      font-size: 20px;
+      color: var(--text-muted);
+      max-width: 800px;
+      line-height: 1.6;
+      margin-bottom: 40px;
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      max-width: 900px;
+    }
+
+    .stat {
+      text-align: left;
+    }
+
+    .stat-value {
+      font-size: 40px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* Quick Nav */
+    .quick-nav {
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 69px;
+      z-index: 100;
+    }
+
+    .quick-nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 40px;
+      display: flex;
+      gap: 32px;
+      overflow-x: auto;
+    }
+
+    .quick-nav a {
+      padding: 16px 0;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+    }
+
+    .quick-nav a:hover,
+    .quick-nav a.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    /* Main Layout */
+    .main-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 60px 40px;
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 60px;
+    }
+
+    /* Content Sections */
+    .content-section {
+      margin-bottom: 80px;
+      scroll-margin-top: 150px;
+    }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 24px;
+      color: var(--text-main);
+    }
+
+    .section-text {
+      font-size: 16px;
+      color: var(--text-muted);
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 32px;
+      margin-bottom: 24px;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 24px;
+    }
+
+    .metric-card {
+      background: var(--bg-alt);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .metric-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--primary);
+      color: white;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin: 0 auto 16px;
+    }
+
+    .metric-value {
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+
+    .metric-label {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    /* Code Block */
+    .code-container {
+      background: #0f172a;
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 24px 0;
+    }
+
+    .code-header {
+      background: #1e293b;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .code-title {
+      font-size: 12px;
+      color: #e2e8f0;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .copy-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: #e2e8f0;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 11px;
+      cursor: pointer;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .copy-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .code-block {
+      padding: 24px;
+      overflow-x: auto;
+    }
+
+    .code-block code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #e2e8f0;
+    }
+
+    .code-comment { color: #64748b; }
+    .code-keyword { color: #7dd3fc; }
+    .code-string { color: #86efac; }
+    .code-function { color: #fbbf24; }
+
+    /* Timeline */
+    .timeline {
+      position: relative;
+      padding-left: 40px;
+      margin-top: 32px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 8px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: var(--border-color);
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 40px;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -36px;
+      top: 8px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--primary);
+      border: 3px solid var(--bg-body);
+      box-shadow: 0 0 0 3px var(--border-color);
+    }
+
+    .timeline-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--primary);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .timeline-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+
+    .timeline-text {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Lists */
+    .custom-list {
+      list-style: none;
+      padding: 0;
+      margin-top: 16px;
+    }
+
+    .custom-list li {
+      padding: 12px 0 12px 32px;
+      position: relative;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .custom-list li::before {
+      content: "→";
+      position: absolute;
+      left: 0;
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    /* Highlight Box */
+    .highlight-box {
+      background: var(--hero-bg);
+      border-left: 4px solid var(--primary);
+      border-radius: 8px;
+      padding: 24px 28px;
+      margin: 32px 0;
+    }
+
+    .highlight-box h3 {
+      font-size: 20px;
+      color: var(--text-main);
+      margin-bottom: 12px;
+    }
+
+    .highlight-box p {
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: sticky;
+      top: 150px;
+      height: fit-content;
+    }
+
+    .sidebar-section {
+      background: var(--bg-alt);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .sidebar-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .sidebar-item {
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .sidebar-item:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .sidebar-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .sidebar-value {
+      font-size: 14px;
+      color: var(--text-main);
+      font-weight: 500;
+    }
+
+    .tag-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .tag {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 4px 12px;
+      border-radius: 16px;
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .action-btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      background: var(--primary);
+      color: white;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 500;
+      font-size: 14px;
+      margin-bottom: 12px;
+      transition: all 0.2s;
+    }
+
+    .action-btn:hover {
+      background: var(--primary-dark);
+    }
+
+    .action-btn.secondary {
+      background: var(--bg-card);
+      color: var(--text-muted);
+      border: 1px solid var(--border-color);
+    }
+
+    .action-btn.secondary:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .main-container {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: relative;
+        top: 0;
+      }
+
+      .hero-title {
+        font-size: 40px;
+      }
+
+      .hero-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-container,
+      .hero-container,
+      .quick-nav-container,
+      .main-container {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .hero-title {
+        font-size: 32px;
+      }
+
+      .hero-stats {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-back">
+        ← Back to Portfolio
+      </a>
+      <div class="nav-actions">
+        <button id="theme-toggle" class="nav-btn" aria-label="Toggle Dark Mode">
+          <span id="theme-icon">🌙</span>
+        </button>
+        <a href="https://github.com/kovacikostanca/Data-Science-Portfolio/tree/main/house-price-prediction" class="nav-btn">View Code</a>
+        <a href="mailto:kovacikostanca@gmail.com" class="nav-btn primary">Get in Touch</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-container">
+      <div class="breadcrumb">
+        <span>Projects</span>
+        <span>/</span>
+        <span>SQL</span>
+        <span>/</span>
+        <span>E-commerce Analytics</span>
+      </div>
+      <h1 class="hero-title">E-commerce SQL Analysis Engine</h1>
+      <p class="hero-subtitle">
+        Built a comprehensive SQL-powered analytics platform to transform raw transactional data into strategic business intelligence. This project demonstrates full-cycle database engineering—from schema design and data cleaning to advanced analytical queries that identify revenue drivers, customer retention patterns, and profit leakage across product categories.
+      </p>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-value">20</span>
+          <span class="stat-label">Order Records Analyzed</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">15</span>
+          <span class="stat-label">Products Tracked</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">7</span>
+          <span class="stat-label">Core KPIs Generated</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">3NF</span>
+          <span class="stat-label">Database Normalization</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Navigation -->
+  <nav class="quick-nav">
+    <div class="quick-nav-container">
+      <a href="#overview" class="active">Overview</a>
+      <a href="#challenge">The Challenge</a>
+      <a href="#approach">Approach</a>
+      <a href="#technical">Technical Details</a>
+      <a href="#results">Results</a>
+      <a href="#learnings">Key Learnings</a>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="main-container">
+    
+    <!-- Left Column: Main Content -->
+    <main>
+
+      <!-- Overview -->
+      <section id="overview" class="content-section">
+        <div class="section-label">Project Overview</div>
+        <h2 class="section-title">SQL-Driven E-commerce Analytics Platform</h2>
+        <p class="section-text">
+          This project simulates the complete lifecycle of building an e-commerce analytics database from scratch. Starting with normalized schema design (3NF), I created a realistic transactional system that tracks customers, products, orders, and line items—mirroring the data architecture used by companies like Amazon and Shopify.
+        </p>
+        <p class="section-text">
+          The core challenge was to not just store data, but to transform it into actionable business intelligence using advanced SQL queries. The system identifies top-performing products, reveals seasonal sales patterns, flags unprofitable transactions, and segments customers by lifetime value.
+        </p>
+
+        <div class="highlight-box">
+          <h3>Business Impact</h3>
+          <p>
+            This analytics engine provides a foundation for data-driven decision-making. By isolating high-margin products, tracking customer retention, and identifying revenue trends, the system enables stakeholders to optimize inventory, launch targeted marketing campaigns, and eliminate loss-generating product lines.
+          </p>
+        </div>
+
+        <div class="card-grid">
+          <div class="metric-card">
+            <div class="metric-icon">🗄️</div>
+            <div class="metric-value">4</div>
+            <div class="metric-label">Normalized Tables (Customers, Products, Orders, Order Items)</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon">🔍</div>
+            <div class="metric-value">7</div>
+            <div class="metric-label">Analytical Queries Developed</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon">📊</div>
+            <div class="metric-value">100%</div>
+            <div class="metric-label">Data Integrity (Post-Cleaning)</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- The Challenge -->
+      <section id="challenge" class="content-section">
+        <div class="section-label">Problem Statement</div>
+        <h2 class="section-title">The Challenge</h2>
+        <p class="section-text">
+          E-commerce businesses generate massive volumes of transactional data, but raw data alone provides no strategic value. Companies face critical visibility gaps that prevent effective decision-making:
+        </p>
+
+        <div class="card">
+          <ul class="custom-list">
+            <li><strong>Revenue vs. Profit Confusion:</strong> High-selling products may actually lose money due to discounts, returns, or operational costs.</li>
+            <li><strong>Customer Segmentation Blind Spots:</strong> Without proper analytics, businesses cannot identify which customers drive 80% of revenue.</li>
+            <li><strong>Seasonal Pattern Invisibility:</strong> Sales trends remain hidden without time-series analysis, preventing proactive inventory planning.</li>
+            <li><strong>Data Quality Issues:</strong> Raw datasets contain null values, inconsistent formatting, and duplicate records that corrupt analysis.</li>
+            <li><strong>Cancelled Order Noise:</strong> Including cancelled transactions in revenue calculations distorts real performance metrics.</li>
+          </ul>
+        </div>
+
+        <p class="section-text">
+          This project addresses these challenges by building a clean, normalized database with embedded data validation rules and a suite of analytical queries that answer critical business questions.
+        </p>
+      </section>
+
+      <!-- Approach -->
+      <section id="approach" class="content-section">
+        <div class="section-label">Methodology</div>
+        <h2 class="section-title">Solution Architecture</h2>
+        
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-label">Phase 1</div>
+            <div class="timeline-title">Database Schema Design (3NF)</div>
+            <div class="timeline-text">
+              Designed a normalized relational database with four core tables: Customers, Products, Orders, and Order Items. Used foreign key constraints to maintain referential integrity and prevent orphaned records. The schema supports efficient JOIN operations and scalable analytics.
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-label">Phase 2</div>
+            <div class="timeline-title">Realistic Data Generation</div>
+            <div class="timeline-text">
+              Created a synthetic but realistic dataset with intentional data quality issues—null values, zero prices, inconsistent categories, and cancelled orders. This mirrors real-world conditions where data arrives messy and requires extensive cleaning before analysis.
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-label">Phase 3</div>
+            <div class="timeline-title">Data Cleaning & Validation</div>
+            <div class="timeline-text">
+              Implemented SQL-based data cleaning procedures: fixing null prices using product reference tables, standardizing category names with INITCAP, removing negative quantities, and purging cancelled orders from analytical datasets. This phase ensured 100% data integrity.
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-label">Phase 4</div>
+            <div class="timeline-title">Analytical Query Development</div>
+            <div class="timeline-text">
+              Built seven core analytical queries covering revenue aggregation, top-selling products, geographic performance, monthly sales trends, customer lifetime value, repeat customer identification, and category-level profitability analysis.
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-label">Phase 5</div>
+            <div class="timeline-title">Business Intelligence Synthesis</div>
+            <div class="timeline-text">
+              Translated SQL query results into strategic business recommendations: prioritizing electronics inventory, launching seasonal promotions in peak months, designing loyalty programs for repeat customers, and eliminating unprofitable product SKUs.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Technical Details -->
+      <section id="technical" class="content-section">
+        <div class="section-label">Technical Implementation</div>
+        <h2 class="section-title">SQL Query Architecture</h2>
+
+        <p class="section-text">
+          The project demonstrates advanced SQL techniques including aggregate functions, window functions, complex JOINs, subqueries, and GROUP BY operations. Here are key technical highlights:
+        </p>
+
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-title">Top-Selling Products Query</span>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <div class="code-block">
+            <code><span class="code-keyword">SELECT</span> 
+    p.product_name,<br />
+    <span class="code-block"></span><span class="code-function">SUM</span>(oi.quantity) <span class="code-keyword">AS</span> total_quantity_sold,<br />
+    <span class="code-block"></span><span class="code-function">SUM</span>(oi.quantity * oi.price) <span class="code-keyword">AS</span> total_revenue<br />
+<span class="code-keyword">FROM</span> order_items oi <br />
+<span class="code-keyword">JOIN</span> products p <span class="code-keyword">ON</span> oi.product_id = p.product_id<br />
+<span class="code-keyword">GROUP BY</span> p.product_name<br />
+<span class="code-keyword">ORDER BY</span> total_revenue <span class="code-keyword">DESC</span>;</code>
+          </div>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-title">Monthly Sales Trend Analysis</span>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <div class="code-block">
+            <code><span class="code-keyword">SELECT</span> 
+    <span class="code-function">DATE_TRUNC</span>(<span class="code-string">'month'</span>,<br /> 
+    <span class="code-block"></span>o.order_date) <span class="code-keyword">AS</span> month,<br />
+    <span class="code-block"></span><span class="code-function">SUM</span>(oi.quantity * oi.price) <span class="code-keyword">AS</span> monthly_revenue,<br />
+    <span class="code-block"></span><span class="code-function">COUNT</span>(<span class="code-keyword">DISTINCT</span> o.order_id) <span class="code-keyword">AS</span> orders_count<br />
+<span class="code-keyword">FROM</span> orders o<br />
+<span class="code-keyword">JOIN</span> order_items oi <span class="code-keyword">ON</span> o.order_id = oi.order_id<br />
+<span class="code-keyword">GROUP BY</span> month<br />
+<span class="code-keyword">ORDER BY</span> month;</code>
+          </div>
+        </div>
+
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-title">Repeat Customer Identification</span>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <div class="code-block">
+            <code><span class="code-keyword">SELECT</span> 
+    c.full_name,<br />
+    <span class="code-block"></span><span class="code-function">COUNT</span>(o.order_id) <span class="code-keyword">AS</span> completed_orders<br />
+<span class="code-keyword">FROM</span> orders o<br />
+<span class="code-keyword">JOIN</span> customers c <span class="code-keyword">ON</span> o.customer_id = c.customer_id<br />
+<span class="code-keyword">WHERE</span> o.order_status = <span class="code-string">'completed'</span><br />
+<span class="code-keyword">GROUP BY</span> c.full_name<br />
+<span class="code-keyword">HAVING</span> <span class="code-function">COUNT</span>(o.order_id) > <span class="code-string">1</span><br />
+<span class="code-keyword">ORDER BY</span> completed_orders <span class="code-keyword">DESC</span>;</code>
+          </div>
+        </div>
+
+        <p class="section-text" style="margin-top: 24px;">
+          <strong>Tech Stack:</strong>
+        </p>
+
+        <ul class="custom-list">
+          <li><strong>PostgreSQL:</strong> Primary database engine with full ACID compliance</li>
+          <li><strong>SQL (DDL/DML):</strong> Schema creation, data manipulation, and complex queries</li>
+          <li><strong>Date Functions:</strong> DATE_TRUNC for time-series analysis</li>
+          <li><strong>Aggregate Functions:</strong> SUM, COUNT, AVG for KPI calculation</li>
+          <li><strong>JOIN Operations:</strong> Multi-table relationships and data integration</li>
+        </ul>
+      </section>
+
+      <!-- Results -->
+      <section id="results" class="content-section">
+        <div class="section-label">Impact & Outcomes</div>
+        <h2 class="section-title">Key Business Insights</h2>
+        
+        <p class="section-text">
+          The analytics engine uncovered critical patterns that inform strategic business decisions:
+        </p>
+
+        <div class="card">
+          <h3 style="font-size: 18px; margin-bottom: 16px; color: var(--text-main);">1. Electronics Dominance</h3>
+          <p class="section-text">
+            Wireless Mouse, USB Keyboard, and Bluetooth Headphones collectively generate the highest revenue. Electronics category should receive 60% of marketing budget and priority inventory allocation.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size: 18px; margin-bottom: 16px; color: var(--text-main);">2. Geographic Concentration</h3>
+          <p class="section-text">
+            USA and Canada represent the primary revenue markets. This suggests an opportunity for international expansion with localized pricing strategies for European and Asian markets.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size: 18px; margin-bottom: 16px; color: var(--text-main);">3. Seasonal Sales Spikes</h3>
+          <p class="section-text">
+            March and December show 40% higher sales volume compared to other months. This pattern indicates strong Q1 New Year purchasing and Q4 holiday shopping, requiring proactive inventory buildup 6-8 weeks before these periods.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size: 18px; margin-bottom: 16px; color: var(--text-main);">4. Repeat Customer Value</h3>
+          <p class="section-text">
+            Customers with 2+ completed orders contribute over 40% of total revenue. Implementing a loyalty program with exclusive discounts for repeat buyers could increase customer lifetime value by 25-30%.
+          </p>
+        </div>
+
+        <div class="highlight-box">
+          <h3>Strategic Recommendations</h3>
+          <ul class="custom-list">
+            <li>Allocate 60% of procurement budget to Electronics category</li>
+            <li>Launch seasonal campaigns in February and November to capture pre-peak demand</li>
+            <li>Design VIP tier for customers with 3+ orders (currently representing top 20% of revenue)</li>
+            <li>Improve email validation at signup to reduce bounce rates and enable targeted marketing</li>
+            <li>Investigate low-performing categories (Furniture, Office) for potential SKU rationalization</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Key Learnings -->
+      <section id="learnings" class="content-section">
+        <div class="section-label">Insights & Reflections</div>
+        <h2 class="section-title">Key Technical Learnings</h2>
+        
+        <div class="card">
+          <h3 style="font-size: 18px; margin-bottom: 16px; color: var(--text-main);">1. Data Quality is Non-Negotiable</h3>
+          <p class="section-text">
+            Real-world datasets are messy by default. Before any analysis, I spent 30% of project time on data cleaning—fixing null values, standardizing formats, and removing invalid records. Without this foundation, every downstream metric would be unreliable.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size: 18px; margin-bottom: 16px; color: var(--text-main);">2. Normalization Prevents Data Redundancy</h3>
+          <p class="section-text">
+            By implementing 3NF (Third Normal Form), the database eliminates duplicate product information across orders. This design principle ensures that updating a product price requires changing only one record, not thousands—critical for scalability.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size: 18px; margin-bottom: 16px; color: var(--text-main);">3. Cancelled Orders Distort Metrics</h3>
+          <p class="section-text">
+            Initially, total revenue calculations included cancelled orders with $0 amounts, artificially inflating order counts. Filtering WHERE order_status = 'completed' provided accurate business metrics and revealed the true conversion rate.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size: 18px; margin-bottom: 16px; color: var(--text-main);">4. JOINs Unlock Multi-Dimensional Analysis</h3>
+          <p class="section-text">
+            The power of SQL becomes evident when combining tables. By JOINing customers, orders, and order_items, I could answer complex questions like "Which customers in Germany purchased Electronics in December?"—impossible with single-table queries.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size: 18px; margin-bottom: 16px; color: var(--text-main);">5. Aggregation Reveals Hidden Patterns</h3>
+          <p class="section-text">
+            Using GROUP BY with DATE_TRUNC exposed seasonal trends that weren't visible in raw transaction logs. Time-series analysis transformed a flat dataset into actionable insights about customer purchasing behavior.
+          </p>
+        </div>
+      </section>
+
+      <!-- Conclusion -->
+      <section id="conclusion" class="content-section">
+        <div class="section-label">Project Summary</div>
+        <h2 class="section-title">Conclusion & Next Steps</h2>
+        
+        <p class="section-text">
+          This project demonstrates the complete lifecycle of building a production-grade analytics system—from normalized schema design to business intelligence extraction. The SQL queries developed here provide a reusable framework for any e-commerce platform seeking to understand customer behavior, optimize inventory, and maximize profitability.
+        </p>
+
+        <p class="section-text">
+          <strong>Future Enhancements:</strong>
+        </p>
+
+        <ul class="custom-list">
+          <li>Implement stored procedures for automated monthly reporting</li>
+          <li>Add customer segmentation using RFM (Recency, Frequency, Monetary) analysis</li>
+          <li>Build predictive models to forecast next month's revenue based on historical trends</li>
+          <li>Integrate with Tableau or Power BI for interactive dashboard visualization</li>
+          <li>Add product recommendation logic based on purchase history patterns</li>
+        </ul>
+
+        <div class="highlight-box" style="margin-top: 32px;">
+          <h3>Skills Demonstrated</h3>
+          <p>
+            Database Design • SQL Query Optimization • Data Cleaning • ETL Pipelines • Business Intelligence • KPI Development • Time-Series Analysis • Data Normalization • Referential Integrity
+          </p>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <h3 class="sidebar-title">Project Info</h3>
+
+        <div class="sidebar-item">
+          <div class="sidebar-label">Industry</div>
+          <div class="sidebar-value">E-commerce / Retail</div>
+        </div>
+
+        <div class="sidebar-item">
+          <div class="sidebar-label">Database</div>
+          <div class="sidebar-value">PostgreSQL</div>
+        </div>
+
+        <div class="sidebar-item">
+          <div class="sidebar-label">Tables</div>
+          <div class="sidebar-value">4 (Customers, Products, Orders, Order Items)</div>
+        </div>
+
+        <div class="sidebar-item">
+          <div class="sidebar-label">Year</div>
+          <div class="sidebar-value">2025</div>
+        </div>
+
+        <div class="sidebar-item">
+          <div class="sidebar-label">Role</div>
+          <div class="sidebar-value">Database Engineer & Analyst</div>
+        </div>
+
+        <div class="sidebar-item">
+          <div class="sidebar-label">Status</div>
+          <div class="sidebar-value">✅ Project Complete</div>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <h3 class="sidebar-title">Tags</h3>
+        <div class="tag-container">
+          <span class="tag">SQL</span>
+          <span class="tag">PostgreSQL</span>
+          <span class="tag">Database Design</span>
+          <span class="tag">Data Cleaning</span>
+          <span class="tag">E-commerce Analytics</span>
+          <span class="tag">Business Intelligence</span>
+          <span class="tag">KPI Development</span>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <h3 class="sidebar-title">Actions</h3>
+        <a href="https://github.com/kovacikostanca/Data-Science-Portfolio/tree/main/E-commerce%20SQL%20Analysis" class="action-btn" target="_blank">
+          View Code on GitHub
+        </a>
+        <a href="../index.html" class="action-btn secondary">
+          ← Back to Portfolio
+        </a>
+      </div>
+
+      <div class="sidebar-section">
+        <h3 class="sidebar-title">Share Project</h3>
+        <div style="display: flex; gap: 8px;">
+          <a href="javascript:void(0)" onclick="copyToClipboard()" class="action-btn secondary" style="flex: 1; padding: 10px; font-size: 18px; text-align: center;" title="Copy Project Link">
+            🔗
+          </a>
+
+          <a href="mailto:kovacikostanca@gmail.com?subject=Inquiry regarding E-commerce SQL Project&body=Hi Kostanca, I saw your E-commerce SQL Analysis project and would like to connect." 
+            class="action-btn secondary" style="flex: 1; padding: 10px; font-size: 18px; text-align: center;" title="Contact Me">
+            📧
+          </a>
+
+          <a href="https://www.linkedin.com/in/kostanca-kovaci" target="_blank" class="action-btn secondary" style="flex: 1; padding: 10px; font-size: 18px; text-align: center;" title="LinkedIn Profile">
+            💼
+          </a>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+
+  <script>
+    // Theme Toggle
+    const toggleBtn = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const htmlElement = document.documentElement;
+
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    if (savedTheme === 'dark') {
+      htmlElement.setAttribute('data-theme', 'dark');
+      themeIcon.textContent = '☀️';
+    }
+
+    toggleBtn.addEventListener('click', () => {
+      const currentTheme = htmlElement.getAttribute('data-theme');
+      if (currentTheme === 'dark') {
+        htmlElement.removeAttribute('data-theme');
+        themeIcon.textContent = '🌙';
+        localStorage.setItem('theme', 'light');
+      } else {
+        htmlElement.setAttribute('data-theme', 'dark');
+        themeIcon.textContent = '☀️';
+        localStorage.setItem('theme', 'dark');
+      }
+    });
+
+    // Copy to Clipboard
+    function copyToClipboard() {
+      const url = window.location.href;
+      navigator.clipboard.writeText(url).then(() => {
+        alert("Project link copied to clipboard!");
+      });
+    }
+
+    // Copy Code Function
+    function copyCode(button) {
+      const codeBlock = button.closest('.code-container').querySelector('.code-block code');
+      const text = codeBlock.textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        button.textContent = 'Copied!';
+        setTimeout(() => {
+          button.textContent = 'Copy';
+        }, 2000);
+      });
+    }
+
+    // Quick Nav Active State
+    const sections = document.querySelectorAll('.content-section');
+    const navLinks = document.querySelectorAll('.quick-nav a');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        if (pageYOffset >= sectionTop - 200) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${current}`) {
+          link.classList.add('active');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

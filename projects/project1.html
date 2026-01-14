@@ -1,0 +1,1512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gendered Perceptions of Places in LLMs | Case Study</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1e40af;
+      --secondary: #7c3aed;
+      --accent: #06b6d4;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --dark: #0f172a;
+      --dark-light: #1e293b;
+      --gray-50: #f8fafc;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --gray-700: #334155;
+      --gray-800: #1e293b;
+      --gray-900: #0f172a;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #ffffff;
+      color: var(--gray-900);
+      line-height: 1.7;
+    }
+
+    /* Navigation */
+    .nav {
+      position: sticky;
+      top: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--gray-200);
+      z-index: 1000;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 16px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-back {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--gray-700);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+
+    .nav-back:hover {
+      background: var(--gray-100);
+      color: var(--primary);
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .nav-btn {
+      padding: 8px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+      border: 1px solid var(--gray-200);
+      background: white;
+      color: var(--gray-700);
+    }
+
+    .nav-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .nav-btn.primary {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .nav-btn.primary:hover {
+      background: var(--primary-dark);
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+      padding: 80px 40px 60px;
+    }
+
+    .hero-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .breadcrumb {
+      display: flex;
+      gap: 8px;
+      color: var(--gray-700);
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    .breadcrumb span {
+      color: var(--gray-700);
+    }
+
+    .hero-title {
+      font-size: 56px;
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 24px;
+      color: var(--gray-900);
+      letter-spacing: -0.02em;
+    }
+
+    .hero-subtitle {
+      font-size: 20px;
+      color: var(--gray-700);
+      max-width: 800px;
+      line-height: 1.6;
+      margin-bottom: 40px;
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      max-width: 900px;
+    }
+
+    .stat {
+      text-align: left;
+    }
+
+    .stat-value {
+      font-size: 40px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: var(--gray-700);
+      font-weight: 500;
+    }
+
+    /* Quick Nav */
+    .quick-nav {
+      background: white;
+      border-bottom: 1px solid var(--gray-200);
+      position: sticky;
+      top: 69px;
+      z-index: 100;
+    }
+
+    .quick-nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 40px;
+      display: flex;
+      gap: 32px;
+      overflow-x: auto;
+    }
+
+    .quick-nav a {
+      padding: 16px 0;
+      color: var(--gray-700);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .quick-nav a:hover,
+    .quick-nav a.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    /* Main Layout */
+    .main-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 60px 40px;
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 60px;
+    }
+
+    /* Content Sections */
+    .content-section {
+      margin-bottom: 80px;
+      scroll-margin-top: 150px;
+    }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 24px;
+      color: var(--gray-900);
+    }
+
+    .section-text {
+      font-size: 16px;
+      color: var(--gray-700);
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    /* Cards */
+    .card {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 32px;
+      margin-bottom: 24px;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 24px;
+    }
+
+    .metric-card {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .metric-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--primary);
+      color: white;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin: 0 auto 16px;
+    }
+
+    .metric-value {
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 8px;
+    }
+
+    .metric-label {
+      font-size: 14px;
+      color: var(--gray-700);
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .tab {
+      padding: 12px 24px;
+      background: transparent;
+      border: none;
+      color: var(--gray-700);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .tab:hover,
+    .tab.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.3s;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Tech Stack */
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .tech-item {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .tech-item:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .tech-icon {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .tech-name {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--gray-700);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Code Block */
+    .code-container {
+      background: var(--gray-900);
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 24px 0;
+    }
+
+    .code-header {
+      background: var(--gray-800);
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .code-title {
+      font-size: 12px;
+      color: var(--gray-200);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .copy-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: var(--gray-200);
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 11px;
+      cursor: pointer;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .copy-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .code-block {
+      padding: 24px;
+      overflow-x: auto;
+    }
+
+    .code-block code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #e2e8f0;
+    }
+
+    .code-comment { color: #64748b; }
+    .code-keyword { color: #7dd3fc; }
+    .code-string { color: #86efac; }
+    .code-function { color: #fbbf24; }
+
+    /* Process Timeline */
+    .timeline {
+      position: relative;
+      padding-left: 40px;
+      margin-top: 32px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 8px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: var(--gray-200);
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 40px;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -36px;
+      top: 8px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--primary);
+      border: 3px solid white;
+      box-shadow: 0 0 0 3px var(--gray-200);
+    }
+
+    .timeline-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--primary);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .timeline-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--gray-900);
+      margin-bottom: 8px;
+    }
+
+    .timeline-text {
+      font-size: 14px;
+      color: var(--gray-700);
+      line-height: 1.6;
+    }
+
+    /* Lists */
+    .custom-list {
+      list-style: none;
+      padding: 0;
+      margin-top: 16px;
+    }
+
+    .custom-list li {
+      padding: 12px 0 12px 32px;
+      position: relative;
+      color: var(--gray-700);
+      line-height: 1.6;
+    }
+
+    .custom-list li::before {
+      content: "→";
+      position: absolute;
+      left: 0;
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: sticky;
+      top: 150px;
+      height: fit-content;
+    }
+
+    .sidebar-section {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .sidebar-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--gray-900);
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .sidebar-item {
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .sidebar-item:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .sidebar-label {
+      font-size: 11px;
+      color: var(--gray-700);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .sidebar-value {
+      font-size: 14px;
+      color: var(--gray-900);
+      font-weight: 500;
+    }
+
+    .tag-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .tag {
+      background: white;
+      border: 1px solid var(--gray-200);
+      padding: 4px 12px;
+      border-radius: 16px;
+      font-size: 11px;
+      color: var(--gray-700);
+      font-weight: 500;
+    }
+
+    .action-btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      background: var(--primary);
+      color: white;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 500;
+      font-size: 14px;
+      margin-bottom: 12px;
+      transition: all 0.2s;
+    }
+
+    .action-btn:hover {
+      background: var(--primary-dark);
+    }
+
+    .action-btn.secondary {
+      background: white;
+      color: var(--gray-700);
+      border: 1px solid var(--gray-200);
+    }
+
+    .action-btn.secondary:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* Highlight Box */
+    .highlight-box {
+      background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%);
+      border-left: 4px solid var(--primary);
+      border-radius: 8px;
+      padding: 24px 28px;
+      margin: 32px 0;
+    }
+
+    .highlight-box h3 {
+      font-size: 20px;
+      color: var(--gray-900);
+      margin-bottom: 12px;
+    }
+
+    .highlight-box p {
+      color: var(--gray-700);
+      line-height: 1.7;
+    }
+
+    /* Image Placeholder */
+    .image-placeholder {
+      width: 100%;
+      height: 400px;
+      background: linear-gradient(135deg, var(--gray-100) 0%, var(--gray-200) 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 80px;
+      margin: 32px 0;
+      border: 1px solid var(--gray-200);
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .main-container {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: relative;
+        top: 0;
+      }
+
+      .hero-title {
+        font-size: 40px;
+      }
+
+      .hero-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-container,
+      .hero-container,
+      .quick-nav-container,
+      .main-container {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .hero-title {
+        font-size: 32px;
+      }
+
+      .hero-stats {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+    }
+
+    /* Theme Variables */
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1e40af;
+      --bg-color: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #334155;
+      --nav-bg: rgba(255, 255, 255, 0.95);
+      --card-bg: #ffffff;
+      --card-border: #e2e8f0;
+      --hero-bg: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+      --stat-bg: #f8fafc;
+      --gray-50: #f8fafc;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --code-bg: #0f172a;
+    }
+
+    body.dark-mode {
+      --bg-color: #0f172a;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --nav-bg: rgba(15, 23, 42, 0.95);
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --hero-bg: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+      --stat-bg: #1e293b;
+      --gray-50: #1e293b;
+      --gray-100: #334155;
+      --gray-200: #334155;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-color);
+      color: var(--text-main);
+      line-height: 1.7;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    /* Navigation */
+    .nav {
+      position: sticky; top: 0;
+      background: var(--nav-bg);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--card-border);
+      z-index: 1000;
+    }
+    .nav-container {
+      max-width: 1400px; margin: 0 auto;
+      padding: 16px 40px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .nav-back {
+      display: flex; align-items: center; gap: 8px;
+      color: var(--text-muted); text-decoration: none;
+      font-size: 14px; font-weight: 500; padding: 8px 16px; border-radius: 8px;
+    }
+    .nav-back:hover { background: var(--gray-100); color: var(--primary); }
+    .nav-actions { display: flex; gap: 12px; }
+    .nav-btn {
+      padding: 8px 20px; border-radius: 8px; text-decoration: none;
+      font-size: 14px; font-weight: 500; transition: all 0.2s;
+      border: 1px solid var(--card-border); background: var(--card-bg);
+      color: var(--text-muted); cursor: pointer;
+    }
+    .nav-btn.primary { background: var(--primary); color: white; border-color: var(--primary); }
+
+    /* Hero */
+    .hero { background: var(--hero-bg); padding: 80px 40px 60px; }
+    .hero-container { max-width: 1200px; margin: 0 auto; }
+    .breadcrumb { display: flex; gap: 8px; color: var(--text-muted); font-size: 14px; margin-bottom: 24px; }
+    .hero-title { font-size: 56px; font-weight: 700; line-height: 1.1; margin-bottom: 24px; letter-spacing: -0.02em; }
+    .hero-subtitle { font-size: 20px; color: var(--text-muted); max-width: 800px; margin-bottom: 40px; }
+    .hero-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; max-width: 900px; }
+    .stat-value { font-size: 40px; font-weight: 700; color: var(--primary); display: block; }
+    .stat-label { font-size: 14px; color: var(--text-muted); font-weight: 500; }
+
+    /* Quick Nav */
+    .quick-nav { background: var(--nav-bg); border-bottom: 1px solid var(--card-border); position: sticky; top: 69px; z-index: 100; }
+    .quick-nav-container { max-width: 1400px; margin: 0 auto; padding: 0 40px; display: flex; gap: 32px; overflow-x: auto; }
+    .quick-nav a { padding: 16px 0; color: var(--text-muted); text-decoration: none; font-size: 14px; font-weight: 500; border-bottom: 2px solid transparent; }
+    .quick-nav a.active { color: var(--primary); border-bottom-color: var(--primary); }
+
+    /* Main Layout */
+    .main-container { max-width: 1400px; margin: 0 auto; padding: 60px 40px; display: grid; grid-template-columns: 1fr 320px; gap: 60px; }
+    .content-section { margin-bottom: 80px; scroll-margin-top: 150px; }
+    .section-label { font-size: 12px; font-weight: 600; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
+    .section-title { font-size: 32px; font-weight: 700; margin-bottom: 24px; }
+    .section-text { font-size: 16px; color: var(--text-muted); margin-bottom: 20px; }
+
+    /* UI Elements */
+    .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 32px; margin-bottom: 24px; }
+    .metric-card { background: var(--stat-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 24px; text-align: center; }
+    .metric-icon { width: 48px; height: 48px; background: var(--primary); color: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 24px; }
+    .highlight-box { background: var(--hero-bg); border-left: 4px solid var(--primary); border-radius: 8px; padding: 24px 28px; margin: 32px 0; }
+    .custom-list { list-style: none; }
+    .custom-list li { padding: 12px 0 12px 32px; position: relative; color: var(--text-muted); }
+    .custom-list li::before { content: "→"; position: absolute; left: 0; color: var(--primary); font-weight: 700; }
+
+    /* Timeline */
+    .timeline { position: relative; padding-left: 40px; margin-top: 32px; }
+    .timeline::before { content: ''; position: absolute; left: 8px; top: 8px; bottom: 8px; width: 2px; background: var(--card-border); }
+    .timeline-item { position: relative; margin-bottom: 40px; }
+    .timeline-item::before { content: ''; position: absolute; left: -36px; top: 8px; width: 16px; height: 16px; border-radius: 50%; background: var(--primary); border: 3px solid var(--bg-color); box-shadow: 0 0 0 3px var(--card-border); }
+
+    /* Tabs & Code */
+    .tabs { display: flex; gap: 4px; margin-bottom: 24px; border-bottom: 1px solid var(--card-border); }
+    .tab { padding: 12px 24px; background: transparent; border: none; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; }
+    .tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; animation: fadeIn 0.3s; }
+    .code-container { background: #0f172a; border-radius: 12px; overflow: hidden; margin: 24px 0; }
+    .code-header { background: #1e293b; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; }
+    .code-block { padding: 24px; overflow-x: auto; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+
+    /* Sidebar */
+    .sidebar-section { background: var(--stat-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 24px; margin-bottom: 24px; }
+    .tag { background: var(--card-bg); border: 1px solid var(--card-border); padding: 4px 12px; border-radius: 16px; font-size: 11px; color: var(--text-muted); }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 1024px) { .main-container { grid-template-columns: 1fr; } .hero-stats { grid-template-columns: repeat(2, 1fr); } }
+/* --- DARK MODE THEME LOGIC --- */
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1e40af;
+      --secondary: #7c3aed;
+      --accent: #06b6d4;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --dark: #0f172a;
+      --dark-light: #1e293b;
+      
+      /* Light Mode Colors */
+      --bg-body: #ffffff;
+      --bg-card: #ffffff;
+      --bg-alt: #f8fafc;
+      --nav-bg: rgba(255, 255, 255, 0.95);
+      --hero-bg: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+      --text-main: #0f172a;
+      --text-muted: #334155;
+      --border-color: #e2e8f0;
+      
+      --gray-50: #f8fafc;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --gray-700: #334155;
+      --gray-800: #1e293b;
+      --gray-900: #0f172a;
+    }
+
+    [data-theme="dark"] {
+      --bg-body: #0f172a;
+      --bg-card: #1e293b;
+      --bg-alt: #1e293b;
+      --nav-bg: rgba(15, 23, 42, 0.95);
+      --hero-bg: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --border-color: #334155;
+      --gray-50: #1e293b;
+      --gray-100: #334155;
+      --gray-200: #334155;
+      --gray-700: #94a3b8;
+      --gray-900: #f8fafc;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-body);
+      color: var(--text-main);
+      line-height: 1.7;
+    }
+
+    /* Navigation */
+    .nav {
+      position: sticky;
+      top: 0;
+      background: var(--nav-bg);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-color);
+      z-index: 1000;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+    .nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 16px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-back {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 8px;
+    }
+    .nav-back:hover {
+      background: var(--gray-100);
+      color: var(--primary);
+    }
+    .nav-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .nav-btn {
+      padding: 8px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      border: 1px solid var(--border-color);
+      background: var(--bg-card);
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+    .nav-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .nav-btn.primary {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+    .nav-btn.primary:hover {
+      background: var(--primary-dark);
+    }
+
+    /* Hero Section */
+    .hero {
+      background: var(--hero-bg);
+      padding: 80px 40px 60px;
+    }
+    .hero-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .breadcrumb {
+      display: flex;
+      gap: 8px;
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+    .hero-title {
+      font-size: 56px;
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 24px;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+    }
+    .hero-subtitle {
+      font-size: 20px;
+      color: var(--text-muted);
+      max-width: 800px;
+      line-height: 1.6;
+      margin-bottom: 40px;
+    }
+    .stat-value {
+      font-size: 40px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 8px;
+      display: block;
+    }
+    .stat-label {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* Quick Nav */
+    .quick-nav {
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 69px;
+      z-index: 100;
+    }
+    .quick-nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 40px;
+      display: flex;
+      gap: 32px;
+      overflow-x: auto;
+    }
+    .quick-nav a {
+      padding: 16px 0;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+    }
+    .quick-nav a:hover, .quick-nav a.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    /* Main Layout */
+    .main-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 60px 40px;
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 60px;
+    }
+
+    /* Content Sections */
+    .content-section { margin-bottom: 80px; scroll-margin-top: 150px; }
+    .section-label { font-size: 12px; font-weight: 600; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
+    .section-title { font-size: 32px; font-weight: 700; margin-bottom: 24px; color: var(--text-main); }
+    .section-text { font-size: 16px; color: var(--text-muted); line-height: 1.8; margin-bottom: 20px; }
+
+    /* Cards */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 32px;
+      margin-bottom: 24px;
+    }
+    .metric-card {
+      background: var(--bg-alt);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+    }
+    .metric-value { font-size: 36px; font-weight: 700; color: var(--text-main); margin-bottom: 8px; }
+    .metric-label { font-size: 14px; color: var(--text-muted); }
+
+    /* Tabs */
+    .tabs { display: flex; gap: 4px; margin-bottom: 24px; border-bottom: 1px solid var(--border-color); }
+    .tab {
+      padding: 12px 24px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+    }
+    .tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+    .tab-content { display: none; animation: fadeIn 0.3s; }
+    .tab-content.active { display: block; }
+
+    /* Tech Stack */
+    .tech-item { background: var(--bg-alt); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; text-align: center; }
+    .tech-name { font-size: 12px; font-weight: 500; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
+
+    /* Code Block (Always Dark) */
+    .code-container { background: #0f172a; border-radius: 12px; overflow: hidden; margin: 24px 0; }
+    .code-header { background: #1e293b; padding: 12px 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+
+    /* Timeline */
+    .timeline::before { background: var(--border-color); }
+    .timeline-title { color: var(--text-main); }
+    .timeline-text { color: var(--text-muted); }
+
+    /* Sidebar */
+    .sidebar-section { background: var(--bg-alt); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; margin-bottom: 24px; }
+    .sidebar-title { color: var(--text-main); }
+    .sidebar-value { color: var(--text-main); }
+    .sidebar-label { color: var(--text-muted); }
+    .tag { background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-muted); }
+
+    /* Highlight Box */
+    .highlight-box {
+      background: var(--hero-bg);
+      border-left: 4px solid var(--primary);
+      border-radius: 8px;
+      padding: 24px 28px;
+      margin: 32px 0;
+    }
+    .highlight-box h3 { color: var(--text-main); }
+
+    /* Placeholders */
+    .image-placeholder {
+      background: var(--bg-alt);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+    }
+
+    /* Utils */
+    .hero-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; max-width: 900px; }
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-top: 24px; }
+    .timeline { position: relative; padding-left: 40px; margin-top: 32px; }
+    .timeline-item { position: relative; margin-bottom: 40px; }
+    .custom-list { list-style: none; }
+    .custom-list li { padding: 12px 0 12px 32px; position: relative; color: var(--text-muted); }
+    .custom-list li::before { content: "→"; position: absolute; left: 0; color: var(--primary); font-weight: 700; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 1024px) {
+      .main-container { grid-template-columns: 1fr; }
+      .hero-title { font-size: 40px; }
+      .hero-stats { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-back">
+        ← Back to Portfolio
+      </a>
+      <div class="nav-actions">
+        <button id="theme-toggle" class="nav-btn" aria-label="Toggle Dark Mode">
+          <span id="theme-icon">🌙</span>
+        </button>
+        <a href="#" class="nav-btn">View Code</a>
+        <a href="mailto:kovacikostanca@gmail.com" class="nav-btn primary">Get in Touch</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-container">
+      <div class="breadcrumb">
+        <span>Projects</span>
+        <span>/</span>
+        <span>AI Ethics</span>
+        <span>/</span>
+        <span>Fairness Auditing</span>
+      </div>
+      <h1 class="hero-title">Gendered & Geographical Bias in LLMs</h1>
+      <p class="hero-subtitle">
+         Developed a comprehensive forensic auditing framework to evaluate gendered safety perceptions in industry-leading LLMs (GPT-5, Claude 4), comparing synthetic AI outputs against 10+ years of Airbnb reviews and official London crime statistics to identify systematic biases.      
+      </p>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-value">1.6M+</span>
+          <span class="stat-label">Airbnb Reviews</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">630</span>
+          <span class="stat-label">LLM Prompts</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">969175</span>
+          <span class="stat-label">Crime Statistics</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">3 Months</span>
+          <span class="stat-label">Project Timeline</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Navigation -->
+  <nav class="quick-nav">
+    <div class="quick-nav-container">
+      <a href="#overview" class="active">Overview</a>
+      <a href="#challenge">The Challenge</a>
+      <a href="#approach">Approach</a>
+      <a href="#technical">Technical Details</a>
+      <a href="#results">Results</a>
+      <a href="#learnings">Key Learnings</a>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="main-container">
+    
+    <!-- Left Column: Main Content -->
+    <main>
+
+      <!-- Overview -->
+      <section id="overview" class="content-section">
+        <div class="section-label">Project Overview</div>
+        <h2 class="section-title">Interrogating the Digital Reflection of Physical Safety</h2>
+        <p class="section-text">
+            As Large Language Models (LLMs) increasingly power travel recommendations and social search engines, they risk amplifying societal stereotypes. This research investigated a critical "perception gap": Do AI models provide different safety advice based on gender, and does that advice reflect reality?        
+        </p>
+        <p class="section-text">
+            This study investigated how LLMs describe various London neighborhoods, when it comes on safety, comparing outputs against 1.6M Airbnb reviews and official crime data. The goal was to identify if there exists systematic biases in AI-generated safety perceptions and understand their implications for travelers.
+        </p>
+
+        <div class="highlight-box">
+          <h3>Business Impact</h3>
+          <p>
+            By systematically auditing model outputs against ground-truth crime data, this project provides a blueprint for Responsible AI deployment. It ensures that recommendation engines provide factual, safe, and unbiased information, protecting brand reputation and user safety in the travel and real estate sectors.          
+          </p>
+        </div>
+
+        <div class="card-grid">
+          <div class="metric-card">
+            <div class="metric-icon">📊</div>
+            <div class="metric-value">21</div>
+            <div class="metric-label">Neighborhoods Coverage</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon">⚡</div>
+            <div class="metric-value">GPT / Claude</div>
+            <div class="metric-label">LLM Models</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon">🎯</div>
+            <div class="metric-value">1.6M+</div>
+            <div class="metric-label">Human Experiences</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- The Challenge -->
+      <section id="challenge" class="content-section">
+        <div class="section-label">Problem Statement</div>
+        <h2 class="section-title">The Challenge</h2>
+        <p class="section-text">
+            Current AI models often fail to capture the nuances of human safety perceptions, leading to several critical issues:
+        </p>
+
+        <div class="card">
+          <ul class="custom-list">
+            <li><strong>Overestimated Risk:</strong> LLMs significantly understate safety, describing neighborhoods as "safe" only ~48-52% of the time, compared to 90% in human reviews</li>
+            <li><strong>Weak Data Alignment:</strong> AI safety assessments show weak or no correlation with actual crime statistics, whereas human reviews track crime patterns closely</li>
+            <li><strong>Systematic Gender Bias:</strong> Both GPT-5 and Claude introduce significant gender biases that do not exist in the human dataset (Airbnb), leading to Artficial Bias</li>
+            <li><strong>Misclassification:</strong> Models frequently misclassify low-crime areas as high-risk, potentially causing economic harm to local communities</li>
+          </ul>
+        </div>
+
+        <div><img src="../images/p1_llm_image.png" alt="Project 1 Image" style="width: 100%; max-width: 500px; margin: auto;"></div>
+      </section>
+
+      <!-- Approach -->
+      <section id="approach" class="content-section">
+        <div class="section-label">Methodology</div>
+        <h2 class="section-title">Solution Approach</h2>
+        
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-label">Phase 1: Discovery</div>
+            <div class="timeline-title">Multi-Source Data Acquisition</div>
+            <div class="timeline-text">
+                Aggregated three distinct pillars: 10 years of London Airbnb reviews (human experience), official London crime rates (2024-2025), and 630 targeted LLM-generated prompts.
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-label">Phase 2: Feature Engineering</div>
+            <div class="timeline-title">Rigorous Preprocessing & Gender Validation</div>
+            <div class="timeline-text">
+                Extracted gender using Gender-Guesser, validated via Genderize.io API and manual checks to achieve 98% accuracy. Neighborhoods were mapped at the granular ONS ward-level to ensure broad geographical coverage.            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-label">Phase 3: NLP & Semantic Analysis</div>
+            <div class="timeline-title">Ensemble Architecture</div>
+            <div class="timeline-text">
+                <ul>
+                    <li><strong>Topic Modeling:</strong> Implemented BERTopic and Prototype-Based Embeddings to categorize text into themes like Safety, Transportation, and Amenities.</li>
+                    <li><strong>Similarity Auditing:</strong> Used Sentence Transformers to measure the semantic distance between AI outputs and real human descriptions.</li>
+                </ul>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-label">Phase 4: Validation</div>
+            <div class="timeline-title">Fairness & Statistical Evaluation</div>
+            <div class="timeline-text">
+                Applied advanced fairness metrics, including Demographic Parity and Equalized Odds, to quantify if the models favored one gender's perspective over another.
+            </div>
+          </div>
+          
+        </div>
+      </section>
+
+      <!-- Technical Details -->
+      <section id="technical" class="content-section">
+        <div class="section-label">Technical Implementation</div>
+        <h2 class="section-title">Technical Deep Dive</h2>
+
+        <div class="tabs">
+          <button class="tab active" onclick="switchTab(event, 'tab1')">Architecture</button>
+        </div>
+
+        <div id="tab1" class="tab-content active">
+          <p class="section-text">
+            The auditing engine utilizes a sophisticated pipeline to compare high-dimensional embeddings and measure semantic divergence across personas.
+          </p>
+
+          <div class="code-container">
+            <div class="code-header">
+              <span class="code-title">Python</span>
+              <button class="copy-btn">Copy</button>
+            </div>
+            <div class="code-block">
+              <code><span class="code-comment"># Analyzing Semantic Similarity between LLMs and Human Experience</span><br />
+                <span class="code-keyword">def</span> <span class="code-function">evaluate_semantic_alignment</span>(llm_embeddings, human_embeddings):<br />
+                <span class="code-comment"># GPT-5 showed a similarity score of 0.2831 [cite: 15]</span><br />
+                <span class="code-comment"># Claude Sonnet 4 showed a similarity score of 0.2320 [cite: 15]</span><br />
+                <span class="code-block"></span><span class="code-name">similarity = cosine_similarity(llm_embeddings, human_embeddings)</span><br />
+                <span class="code-block"></span><span class="code-keyword">return</span> <span class="code-name">similarity</span><br />
+                <br />
+                <span class="code-comment"># Fairness Auditing: Demographic Parity Check</span><br />
+                <span class="code-comment"># Measures if genders receive equal safe/unsafe ratings [cite: 77, 100]</span><br />
+                <span class="code-name">parity_gap_gpt5 = </span><span class="code-keyword">abs</span><span class="code-name">(female_safe_rate - male_safe_rate)</span> # Significant gap: p=0.049 [cite: 113]</span>
+              </code>
+            </div>
+          </div>
+
+          <ul class="custom-list">
+            <li><strong>🧠 Models:</strong>ChatGPT-5, Claude Sonnet 4</li>
+            <li><strong>📊 NLP:</strong> BERTopic, Sentence Transformers, Sentiment Polarity Analysis</li>
+            <li><strong>⚡Tools:</strong> Genderize.io API, Gender-Guesser</li>
+            <li><strong>🚀 Evaluation:</strong> T-tests, Spearman’s Rank Correlation, Demographic Parity</li>
+          </ul>
+
+        </div>
+      </section>
+
+      <!-- Results -->
+      <section id="results" class="content-section">
+        <div class="section-label">Impact & Outcomes</div>
+        <h2 class="section-title">Results & Business Impact</h2>
+        
+        <p class="section-text">
+            The audit proved that current LLMs risk amplifying stereotypes and misrepresenting neighborhood safety.
+        </p>
+       
+
+        <div class="card">
+          <h3 style="font-size: 20px; margin-bottom: 16px; color: var(--gray-900);">Detailed Impact Analysis</h3>
+          
+          <div style="margin-bottom: 24px;">
+            <ul class="custom-list">
+              <li>📉 <strong>Safety Perception Gap:</strong> Human reviews describe 90% of areas as safe; Claude (52%) and GPT-5 (44%) are significantly more cautious.</li>
+              <li>⚖️ <strong>Bias Discovery:</strong> Found significant gender bias in both models (Claude: $t=3.85, p=0.001$; GPT-5: $t=2.44, p=0.024$)26.</li>
+              <li>🗺️ <strong>Geographical Hallucinations:</strong> GPT-5 frequently misclassifies low-crime areas as high-risk, diverging from ground-truth police data.</li>
+              <li>🔍 <strong>Weak Semantic Alignment:</strong> LLMs only partially reflect gendered nuances, showing weak semantic similarity to actual human reviews.</li>
+            </ul>
+          </div>
+        </div>
+        </section>
+
+        
+
+        <div><img src="../images/p1_poster.png" alt="Impact Analysis"></div>
+        <br />
+      
+
+      <!-- Key Learnings -->
+      <section id="learnings" class="content-section">
+        <div class="section-label">Insights & Reflections</div>
+        <h2 class="section-title">Key Learnings</h2>
+
+        <div class="card">
+          <h3 style="font-size: 18px; margin-bottom: 16px; color: var(--gray-900);">1. LLMs Overestimated Risk</h3>
+          <p class="section-text">
+            AI models tend to exaggerate unsafe tones compared to actual human residents or travelers. This suggests a "safety-first" training bias that can lead to inaccurate real-world advice.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size: 18px; margin-bottom: 16px; color: var(--gray-900);">2. Human Reviews as Ground Truth</h3>
+          <p class="section-text">
+            The study confirmed that human-authored reviews (Airbnb) track official crime patterns much more reliably than LLMs.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size: 18px; margin-bottom: 16px; color: var(--gray-900);">3. Gendered Perception Bias</h3>
+          <p class="section-text">
+            The discovery of a significant "Gender Safety Gap" in AI (which does not exist in the human data) proves that models introduce new biases during training or RLHF processes.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size: 18px; margin-bottom: 16px; color: var(--gray-900);">4. Need for Place-Based Fairness</h3>
+          <p class="section-text">
+            Fairness metrics (Demographic Parity, Equalized Odds) are rarely used in travel studies, but this project demonstrates they are essential for identifying geographical discrimination in AI.
+          </p>
+        </div>
+
+        <div class="highlight-box">
+          <h3>Future Enhancements</h3>
+          <p>
+            Scaling the Auditing Framework Based on the success of the initial audit, several high-impact enhancements are planned to move from a research-based audit to a production-ready monitoring system:
+          </p>
+          <ul class="custom-list" style="margin-top: 12px;">
+            <li><strong>Expansion to Multi-City Analysis</strong> While London served as a critical testbed, the framework is designed to be city-agnostic. Future iterations will scale to other global hubs (e.g., New York, Tokyo, Paris) to determine if geographical hallucinations and gender biases vary across different cultural and legal contexts.</li>
+            <li><strong>Investigation of Bias to Multi-LLMs</strong> The framework need to be explored further and be extended to evaluate multiple LLMs for consistency and bias across models.</li>
+            <li><strong>Intersectionality Deep-Dives</strong> Expand the audit beyond binary gender to include other intersectional demographics such as age, disability status, and ethnicity. This will provide a more holistic understanding of how AI-generated travel advice impacts diverse user groups.</li>
+        </ul>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <h3 class="sidebar-title">Project Info</h3>
+        
+        <div class="sidebar-item">
+          <div class="sidebar-label">Institution</div>
+          <div class="sidebar-value">Middlesex University London</div>
+        </div>
+
+        <div class="sidebar-item">
+          <div class="sidebar-label">Lead Resourcer</div>
+          <div class="sidebar-value">Kostanca Kovaci</div>
+        </div>
+
+        <div class="sidebar-item">
+          <div class="sidebar-label">Supervisor</div>
+          <div class="sidebar-value">Dr. Giovanni Quattrone</div>
+        </div>
+
+        <div class="sidebar-item">
+          <div class="sidebar-label">Duration</div>
+          <div class="sidebar-value">3 Months</div>
+        </div>
+
+        <div class="sidebar-item">
+          <div class="sidebar-label">Year</div>
+          <div class="sidebar-value">2025</div>
+        </div>
+
+        <div class="sidebar-item">
+          <div class="sidebar-label">Team</div>
+          <div class="sidebar-value">Lead Data Scientist<br>1 ML Engineer<br>1 DevOps Engineer</div>
+        </div>
+
+        <div class="sidebar-item">
+          <div class="sidebar-label">Status</div>
+          <div class="sidebar-value">✅ Completed</div>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <h3 class="sidebar-title">Tags</h3>
+        <div class="tag-container">
+          <span class="tag">AI Ethics</span>
+          <span class="tag">LLM Auditing</span>
+          <span class="tag">NLP</span>
+          <span class="tag">Fairness</span>
+          <span class="tag">Data Science</span>
+          <span class="tag">Python</span>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <h3 class="sidebar-title">Actions</h3>
+        <a href="https://github.com/kovacikostanca/Data-Science-Portfolio/tree/main/Gendered%20Perceptions%20of%20Places%20in%20LLMs" class="action-btn" target="_blank">
+          View Code on GitHub
+        </a>
+        <a href="https://github.com/kovacikostanca/Data-Science-Portfolio/blob/main/Gendered%20Perceptions%20of%20Places%20in%20LLMs/Gendered%20Perceptions%20of%20Places%20in%20LLMs.pdf" class="action-btn secondary">
+          Download Case Study PDF
+        </a>
+        <a href="../index.html" class="action-btn secondary">
+          ← Back to Portfolio
+        </a>
+      </div>
+
+      <div class="sidebar-section">
+        <h3 class="sidebar-title">Share Project</h3>
+        <div style="display: flex; gap: 8px;">
+          <a href="https://github.com/kovacikostanca/Data-Science-Portfolio/tree/main/Gendered%20Perceptions%20of%20Places%20in%20LLMs" class="action-btn secondary" style="flex: 1; padding: 10px; font-size: 18px;">🔗</a>
+          <a href="mailto:kovacikostanca@gmail.com?subject=Inquiry regarding Customer Churn Project&body=Hi Kostanca, I saw your project at https://github.com/kovacikostanca/Data-Science-Portfolio/tree/main/Customer%20Churn%20Prediction and would like to connect." 
+            class="action-btn secondary" style="flex: 1; padding: 10px; font-size: 18px; text-align: center;" title="Contact Me">
+            📧
+          </a>
+          <a href="https://www.linkedin.com/in/kostanca-kovaci" target="_blank" class="action-btn secondary" style="flex: 1; padding: 10px; font-size: 18px; text-align: center;" title="LinkedIn Profile">
+            💼
+          </a>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+
+  <script>
+    // --- THEME TOGGLE SCRIPT ---
+    const toggleBtn = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const htmlElement = document.documentElement;
+
+    // Load saved preference
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    if (savedTheme === 'dark') {
+      htmlElement.setAttribute('data-theme', 'dark');
+      themeIcon.textContent = '☀️';
+    }
+
+    toggleBtn.addEventListener('click', () => {
+      const currentTheme = htmlElement.getAttribute('data-theme');
+      if (currentTheme === 'dark') {
+        htmlElement.removeAttribute('data-theme');
+        themeIcon.textContent = '🌙';
+        localStorage.setItem('theme', 'light');
+      } else {
+        htmlElement.setAttribute('data-theme', 'dark');
+        themeIcon.textContent = '☀️';
+        localStorage.setItem('theme', 'dark');
+      }
+    });
+
+    // --- TAB SWITCH SCRIPT ---
+    function switchTab(evt, tabName) {
+      const contents = document.getElementsByClassName("tab-content");
+      for (let i = 0; i < contents.length; i++) contents[i].style.display = "none";
+      const tabs = document.getElementsByClassName("tab");
+      for (let i = 0; i < tabs.length; i++) tabs[i].classList.remove("active");
+      document.getElementById(tabName).style.display = "block";
+      evt.currentTarget.classList.add("active");
+    }
+  </script>
+
+</body>
+</html>
