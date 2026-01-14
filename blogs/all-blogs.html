@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blogs | Kostanca Kovaci</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+  <div class="bg-gradient"></div>
+
+  <!-- Navigation -->
+  <nav id="navbar">
+    <div class="nav-container">
+      <div class="logo">PORTFOLIO</div>
+      <div class="nav-links">
+        <a href="../index.html">Home</a>
+        <a href="../index.html#contact">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <section id="portfolio" style="padding-top: 120px;">
+    <div class="section-header">
+      <h2>Blogs</h2>
+      <p>A collection of my data science & analytics blogs</p>
+    </div>
+
+    <!-- Category Buttons -->
+    <div class="project-filters">
+      <button class="filter-btn active" data-filter="all">All</button>
+    </div>
+
+    <!-- Projects Grid -->
+    <div class="projects-grid"> 
+
+      <!-- Project 1 -->
+      <div class="project-card"  onclick="location.href='blog1.html'">
+        <img src="../images/Interpretation Framework.png" class="project-image">
+        <div class="project-content">
+          <h3>From Code to Insights: A Systematic Framework for Developing Data Interpretation Skills</h3>
+          <p>Interpretation Skill</p>
+        </div>
+      </div>
+
+      <!-- Project 2 -->
+      <div class="project-card"  onclick="location.href='blog2.html'">  
+        <img src="../images/beginners_trap.png" class="project-image">
+        <div class="project-content">
+          <h3>The Beginner's Trap: Learning Tools Without Solving Problems</h3>
+          <p>Learning Strategy</p>
+        </div>
+
+  </section>
+
+  <footer>
+    <p>© 2025 Kostanca Kovaci</p>
+  </footer>
+
+  <!-- Filtering Script -->
+  <script>
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const projects = document.querySelectorAll('.project-card');
+
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const filter = btn.getAttribute('data-filter');
+
+        projects.forEach(project => {
+          if (filter === 'all' || project.getAttribute('data-category') === filter) {
+            project.style.display = 'block';
+          } else {
+            project.style.display = 'none';
+          }
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
