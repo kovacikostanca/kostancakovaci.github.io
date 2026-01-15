@@ -1316,3 +1316,42 @@ nav {
     z-index: 99;
   }
 }
+
+/* ===== FORCE COLOR CONSISTENCY ON MOBILE ===== */
+
+/* Force dark color scheme */
+:root {
+  color-scheme: dark;
+}
+
+/* Prevent mobile browsers from adjusting colors */
+html {
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
+/* Prevent any color filters on mobile */
+@media (max-width: 968px) {
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* Prevent mobile browser night mode from affecting colors */
+  body, section, div, nav, header, footer {
+    color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+}
+
+/* iOS specific fixes */
+@supports (-webkit-touch-callout: none) {
+  body {
+    background: #060e31 !important;
+  }
+  
+  nav {
+    background: rgba(21, 36, 69, 0.95) !important;
+  }
+}
