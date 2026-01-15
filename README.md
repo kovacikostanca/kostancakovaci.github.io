@@ -1,2 +1,2 @@
 <h1>Hi I am Kostanca Kovaci</h1>
-<p>This is my Data Science Portfolio Website</p>
+<p><strong>This is my Data Science Portfolio Website</strong></p> generated and created by me.
