@@ -33,7 +33,7 @@ const serviceCards = document.querySelectorAll('.service-card');
 serviceCards.forEach((card, index) => {
   card.addEventListener('click', () => {
     // Open the corresponding service page in the ../services/ folder
-    window.location.href = `../services/service${index + 1}.html`;
+    window.location.href = `services/service${index + 1}.html`;
   });
 });
 
