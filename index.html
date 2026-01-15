@@ -20,6 +20,14 @@
   <nav id="navbar">
     <div class="nav-container">
       <div class="logo">PORTFOLIO</div>
+
+      <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+
       <div class="nav-links">
         <a href="#about">About</a>
         <a href="#services">Services</a>
@@ -626,6 +634,23 @@
       themeToggle.textContent = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
     });
   </script>
+
+  <script>
+  const hamburger = document.getElementById("hamburger");
+  const navLinks = document.querySelector(".nav-links");
+
+  hamburger.addEventListener("click", () => {
+    navLinks.classList.toggle("active");
+  });
+
+  // Close menu when clicking a link
+  document.querySelectorAll(".nav-links a").forEach(link => {
+    link.addEventListener("click", () => {
+      navLinks.classList.remove("active");
+    });
+  });
+</script>
+
 </body>
 </html>
 

@@ -1113,6 +1113,78 @@ body.dark {
   }
 }
 
+/* =========================
+   HAMBURGER MENU
+   ========================= */
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+  gap: 6px;
+}
+
+.hamburger span {
+  width: 26px;
+  height: 3px;
+  background: var(--text);
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+
+/* Mobile navigation */
+@media (max-width: 768px) {
+
+  .hamburger {
+    display: flex;
+  }
+
+  .nav-links {
+    position: absolute;
+    top: 80px;
+    right: 20px;
+    background: rgba(15, 23, 42, 0.98);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    border-radius: 16px;
+    padding: 20px 25px;
+
+    display: none;
+    flex-direction: column;
+    gap: 16px;
+
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    z-index: 999;
+  }
+
+  .nav-links a {
+    font-size: 1rem;
+  }
+
+  .nav-links.active {
+    display: flex;
+  }
+}
+
+
+@media (max-width: 768px) {
+
+  nav {
+    background: #0f172a !important;
+    backdrop-filter: none !important;
+  }
+
+  .nav-links {
+    background: #0f172a !important;
+    backdrop-filter: none !important;
+  }
+
+  .service-card,
+  .project-card,
+  .blog-card {
+    background: #111827 !important;
+  }
+}
 
 
 
