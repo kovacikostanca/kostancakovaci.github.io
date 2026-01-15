@@ -966,6 +966,152 @@ body.dark {
 }
 
 
+/* =========================
+   RESPONSIVE DESIGN
+   ========================= */
+
+/* Tablets (≤ 1024px) */
+@media (max-width: 1024px) {
+
+  body {
+    font-size: 15px;
+  }
+
+  /* Navigation */
+  .nav-container {
+    padding: 0 25px;
+  }
+
+  .nav-links {
+    gap: 18px;
+  }
+
+  /* Hero */
+  .hero-content {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 50px;
+  }
+
+  .hero-text {
+    max-width: 100%;
+  }
+
+  .hero-image {
+    justify-self: center;
+  }
+
+  /* About */
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    text-align: center;
+  }
+
+  .about-image-side img {
+    margin: 0 auto;
+  }
+
+  /* Services */
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Projects / Tutorials / Blogs */
+  .projects-grid,
+  .blog-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Contact */
+  .contact-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Phones (≤ 768px) */
+@media (max-width: 768px) {
+
+  /* Navigation */
+  .nav-links {
+    display: none;
+  }
+
+  /* Hero */
+  #hero {
+    padding: 100px 20px 80px;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  /* Tech badges */
+  .tech-stack {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* Sections spacing */
+  section {
+    padding: 80px 20px;
+  }
+
+  /* Services */
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Projects / Tutorials / Blogs */
+  .projects-grid,
+  .blog-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Cards */
+  .project-card,
+  .service-card,
+  .blog-card {
+    padding: 25px;
+  }
+
+  /* Contact */
+  #contact {
+    padding: 60px 20px;
+  }
+}
+
+/* Small phones (≤ 480px) */
+@media (max-width: 480px) {
+
+  h1 {
+    font-size: 2.1rem;
+  }
+
+  h2 {
+    font-size: 2rem;
+  }
+
+  p {
+    font-size: 0.95rem;
+  }
+
+  .btn,
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+    text-align: center;
+  }
+
+  footer {
+    font-size: 0.85rem;
+  }
+}
 
 
 
