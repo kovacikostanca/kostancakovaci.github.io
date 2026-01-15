@@ -1,31 +1,38 @@
-// Optional: function to open project (not needed if you use <a href>)
+// Function to open project pages
 function openProject(url) {
   window.location.href = url;
 }
 
-// Filtering functionality
-const filterButtons = document.querySelectorAll('.filter-btn');
-const projects = document.querySelectorAll('.project-card');
+// Simple Mobile Menu Toggle
+const menuToggle = document.getElementById('menu-toggle');
+const navLinks = document.querySelector('.nav-links');
 
-filterButtons.forEach(btn => {
-  btn.addEventListener('click', () => {
-    // Highlight active button
-    filterButtons.forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
+if (menuToggle && navLinks) {
+  menuToggle.addEventListener('click', function() {
+    this.classList.toggle('active');
+    navLinks.classList.toggle('active');
+    document.body.classList.toggle('menu-active');
+  });
 
-    const filter = btn.dataset.filter;
-
-    projects.forEach(project => {
-      // Check if project category includes filter
-      if (filter === 'all' || project.dataset.category.includes(filter)) {
-        project.style.display = 'block';
-      } else {
-        project.style.display = 'none';
-      }
+  // Close menu when clicking on a link
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+      menuToggle.classList.remove('active');
+      navLinks.classList.remove('active');
+      document.body.classList.remove('menu-active');
     });
   });
-});
 
-
+  // Close menu when clicking on overlay
+  document.addEventListener('click', (e) => {
+    if (document.body.classList.contains('menu-active') && 
+        !navLinks.contains(e.target) && 
+        !menuToggle.contains(e.target)) {
+      menuToggle.classList.remove('active');
+      navLinks.classList.remove('active');
+      document.body.classList.remove('menu-active');
+    }
+  });
+}
 
 
