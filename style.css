@@ -1167,25 +1167,5 @@ body.dark {
 }
 
 
-@media (max-width: 768px) {
-
-  nav {
-    background: #0f172a !important;
-    backdrop-filter: none !important;
-  }
-
-  .nav-links {
-    background: #0f172a !important;
-    backdrop-filter: none !important;
-  }
-
-  .service-card,
-  .project-card,
-  .blog-card {
-    background: #111827 !important;
-  }
-}
-
-
 
 
