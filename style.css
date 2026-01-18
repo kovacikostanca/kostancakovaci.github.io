@@ -1,3 +1,147 @@
+    /* ===== PREVENT DARK MODE FROM CHANGING TEXT COLORS ===== */
+/* Add this to the TOP of your style.css file */
+
+/* Force color scheme and prevent OS dark mode interference */
+:root {
+  color-scheme: only dark;
+  supported-color-schemes: dark;
+}
+
+/* Prevent automatic color adjustments on all text elements */
+* {
+  color-scheme: only dark !important;
+}
+
+/* Force text colors to stay consistent regardless of device dark mode */
+body,
+h1, h2, h3, h4, h5, h6,
+p, span, a, li, div,
+label, input, textarea, button {
+  color: inherit !important;
+  -webkit-text-fill-color: inherit !important;
+}
+
+/* Specific overrides for important text elements */
+.hero-text h1,
+.gradient-text {
+  background: linear-gradient(135deg, var(--primary)) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+
+.hero-text .role {
+  color: var(--accent) !important;
+}
+
+.hero-text p {
+  color: var(--text-muted) !important;
+}
+
+.section-header h2 {
+  background: linear-gradient(135deg, var(--primary), var(--accent)) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+
+.section-header p {
+  color: var(--text-muted) !important;
+}
+
+/* Force navigation text colors */
+.logo {
+  background: linear-gradient(135deg, var(--accent)) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+
+.nav-links a {
+  color: var(--text-muted) !important;
+}
+
+.nav-links a:hover {
+  color: var(--text) !important;
+}
+
+/* Force card text colors */
+.service-card h3,
+.project-content h3,
+.blog-card h3 {
+  color: var(--text) !important;
+}
+
+.service-card p,
+.project-content p,
+.blog-card p {
+  color: var(--text-muted) !important;
+}
+
+.service-subtitle {
+  color: var(--text-muted) !important;
+}
+
+/* About section text */
+.about-text p {
+  color: var(--text-muted) !important;
+}
+
+/* Button text */
+.btn-primary {
+  color: rgb(17, 19, 158) !important;
+}
+
+.btn-secondary {
+  color: var(--text) !important;
+}
+
+/* Tech badges */
+.tech-badge {
+  color: var(--accent) !important;
+}
+
+/* Contact section */
+.contact-details h4 {
+  color: var(--text) !important;
+}
+
+.contact-details p {
+  color: var(--text-muted) !important;
+}
+
+/* Footer */
+footer {
+  color: var(--text-muted) !important;
+}
+
+/* Prevent any automatic color inversion */
+@media (prefers-color-scheme: dark) {
+  * {
+    color-scheme: only dark !important;
+  }
+  
+  /* Ensure no text gets inverted */
+  body, body * {
+    filter: none !important;
+  }
+}
+
+/* Mobile-specific enforcement */
+@media (max-width: 968px) {
+  /* Extra enforcement for all text on mobile */
+  body, body * {
+    -webkit-text-fill-color: inherit !important;
+  }
+  
+  /* Prevent gradients from being affected */
+  .gradient-text,
+  .section-header h2,
+  .logo {
+    -webkit-text-fill-color: transparent !important;
+  }
+}
+
     * {
       margin: 0;
       padding: 0;
