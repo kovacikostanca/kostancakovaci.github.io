@@ -1767,3 +1767,45 @@ ul {
     color: var(--primary); /* This uses your #6366f1 indigo color */
     font-weight: 600;      /* Optional: makes the name stand out more */
 }
+
+@media (max-width: 968px) {
+  .nav-menu {
+    position: fixed;
+    right: -100%; /* Hides it off-screen to the right */
+    top: 70px;
+    flex-direction: column;
+    background: var(--card-bg);
+    width: 100%;
+    height: 100vh;
+    text-align: center;
+    transition: 0.3s;
+    padding: 40px 0;
+    z-index: 999;
+  }
+
+  /* When you toggle the 'active' class via JS, show the menu */
+  .nav-menu.active {
+    right: 0;
+  }
+
+  .nav-toggle {
+    display: flex; /* Shows the hamburger bars */
+  }
+  
+  .hero-content, .about-content, .contact-content {
+    grid-template-columns: 1fr; /* Stack elements vertically */
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-container {
+    width: 280px;
+    height: 280px;
+    margin: 0 auto;
+  }
+  
+  .hero-text h1 {
+    font-size: 2.2rem;
+  }
+}
