@@ -671,32 +671,7 @@
       color: var(--text-muted);
     }
 
-    /* Responsive */
-    @media (max-width: 968px) {
-      .hero-content,
-      .about-grid,
-      .contact-container {
-        grid-template-columns: 1fr;
-      }
-
-      .hero-text h1 {
-        font-size: 2.5rem;
-      }
-
-      .profile-container {
-        width: 300px;
-        height: 300px;
-      }
-
-      .nav-links {
-        gap: 15px;
-      }
-
-      .projects-grid,
-      .services-grid {
-        grid-template-columns: 1fr;
-      }
-    }
+    
 
 /* ===== Project Detail Pages ===== */
 
@@ -1003,65 +978,7 @@ body.dark {
   transform: rotate(-45deg) translate(7px, -7px);
 }
 
-/* Mobile Menu Styles */
-@media (max-width: 968px) {
-  .menu-toggle {
-    display: block;
-  }
 
-  .nav-links {
-    position: fixed;
-    top: 0;
-    right: -100%;
-    width: 280px;
-    height: 100vh;
-    background: var(--dark-light);
-    backdrop-filter: blur(10px);
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 30px;
-    transition: right 0.4s ease;
-    box-shadow: -5px 0 25px rgba(0, 0, 0, 0.5);
-    z-index: 999;
-    padding: 60px 20px;
-  }
-
-  .nav-links.active {
-    right: 0;
-  }
-
-  .nav-links a {
-    font-size: 1.3rem;
-    width: 100%;
-    text-align: center;
-    padding: 15px 0;
-  }
-
-  .nav-links a::after {
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  /* Overlay when menu is open */
-  body.menu-open::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    z-index: 998;
-    animation: fadeIn 0.3s ease;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-}
 
 /* ===== COLOR CONSISTENCY FIX ===== */
 
@@ -1106,138 +1023,7 @@ nav {
   }
 }
 
-/* ===== MOBILE RESPONSIVE IMPROVEMENTS ===== */
 
-@media (max-width: 968px) {
-  /* Hero Section Mobile Fix */
-  #hero {
-    min-height: auto;
-    padding: 40px 20px;
-  }
-
-  .hero-content {
-    gap: 40px;
-  }
-
-  .hero-text h1 {
-    font-size: 2.2rem;
-    line-height: 1.2;
-  }
-
-  .hero-text .role {
-    font-size: 1.4rem;
-  }
-
-  .hero-text p {
-    font-size: 1rem;
-  }
-
-  /* Profile Image Mobile */
-  .profile-container {
-    width: 280px;
-    height: 280px;
-  }
-
-  .floating-badge {
-    font-size: 0.75rem;
-    padding: 8px 14px;
-  }
-
-  .badge-1 { top: 5%; left: -5%; }
-  .badge-2 { top: 65%; right: -10%; }
-  .badge-3 { bottom: 5%; left: 0%; }
-
-  /* Section Padding */
-  section {
-    padding: 60px 20px;
-  }
-
-  .section-header h2 {
-    font-size: 2rem;
-  }
-
-  .section-header p {
-    font-size: 1rem;
-  }
-
-  /* About Section Mobile */
-  #about {
-    padding: 60px 30px;
-  }
-
-  .about-text p {
-    font-size: 0.95rem;
-  }
-
-  /* Services Grid Mobile */
-  .services-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-
-  .service-card {
-    padding: 25px 20px;
-  }
-
-  /* Projects Grid Mobile */
-  .projects-grid {
-    grid-template-columns: 1fr;
-    gap: 25px;
-  }
-
-  /* Blog Grid Mobile */
-  .blog-grid {
-    grid-template-columns: 1fr;
-    gap: 25px;
-  }
-
-  /* Contact Section Mobile */
-  .contact-container {
-    grid-template-columns: 1fr;
-    gap: 30px;
-  }
-
-  /* Buttons Mobile */
-  .hero-buttons {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .btn {
-    width: 100%;
-    text-align: center;
-  }
-
-  /* Tech Stack Mobile */
-  .tech-stack {
-    justify-content: center;
-  }
-
-  .tech-badge {
-    font-size: 0.75rem;
-    padding: 6px 12px;
-  }
-}
-
-@media (max-width: 480px) {
-  .hero-text h1 {
-    font-size: 1.8rem;
-  }
-
-  .profile-container {
-    width: 240px;
-    height: 240px;
-  }
-
-  .service-card h3,
-  .project-content h3 {
-    font-size: 1.2rem;
-  }
-
-  .section-header h2 {
-    font-size: 1.6rem;
-  }
-}
 
 
 /* Hamburger Menu Button */
@@ -1259,63 +1045,7 @@ nav {
   transition: 0.3s;
 }
 
-/* Mobile Styles */
-@media (max-width: 968px) {
-  #menu-toggle {
-    display: block;
-  }
 
-  .nav-links {
-    position: fixed;
-    right: -100%;
-    top: 0;
-    height: 100vh;
-    width: 70%;
-    max-width: 300px;
-    background: rgba(21, 36, 69, 0.98);
-    flex-direction: column !important;
-    justify-content: center;
-    align-items: center;
-    gap: 40px !important;
-    transition: right 0.4s ease;
-    box-shadow: -5px 0 20px rgba(0, 0, 0, 0.5);
-    list-style: none;
-    padding: 0;
-  }
-
-  .nav-links.active {
-    right: 0;
-  }
-
-  .nav-links a {
-    font-size: 1.3rem;
-  }
-
-  /* Hamburger Animation */
-  #menu-toggle.active span:nth-child(1) {
-    transform: rotate(45deg) translate(7px, 7px);
-  }
-
-  #menu-toggle.active span:nth-child(2) {
-    opacity: 0;
-  }
-
-  #menu-toggle.active span:nth-child(3) {
-    transform: rotate(-45deg) translate(7px, -7px);
-  }
-
-  /* Overlay */
-  body.menu-active::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    z-index: 99;
-  }
-}
 
 /* ===== FORCE COLOR CONSISTENCY ON MOBILE ===== */
 
@@ -1332,29 +1062,7 @@ html {
 }
 
 /* Prevent any color filters on mobile */
-@media (max-width: 968px) {
-  * {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-  
-  /* Prevent mobile browser night mode from affecting colors */
-  body, section, div, nav, header, footer {
-    color-adjust: exact !important;
-    -webkit-print-color-adjust: exact !important;
-  }
-}
 
-/* iOS specific fixes */
-@supports (-webkit-touch-callout: none) {
-  body {
-    background: #060e31 !important;
-  }
-  
-  nav {
-    background: rgba(21, 36, 69, 0.95) !important;
-  }
-}
 
 
 .case-study-banner {
@@ -1490,21 +1198,7 @@ html {
   font-weight: 600;
 }
 
-@media (max-width: 768px) {
-  .case-study-banner {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-    padding: 2rem;
-  }
-  
-  .preview-stats {
-    gap: 1rem;
-  }
-  
-  .stat-item {
-    padding: 1rem 1.5rem;
-  }
-}
+
 
 /* ===== Contact Section ===== */
 .contact-section {
@@ -2346,32 +2040,7 @@ html {
       color: var(--text-muted);
     }
 
-    /* Responsive */
-    @media (max-width: 968px) {
-      .hero-content,
-      .about-grid,
-      .contact-container {
-        grid-template-columns: 1fr;
-      }
-
-      .hero-text h1 {
-        font-size: 2.5rem;
-      }
-
-      .profile-container {
-        width: 300px;
-        height: 300px;
-      }
-
-      .nav-links {
-        gap: 15px;
-      }
-
-      .projects-grid,
-      .services-grid {
-        grid-template-columns: 1fr;
-      }
-    }
+    
 
 /* ===== Project Detail Pages ===== */
 
@@ -2678,65 +2347,7 @@ body.dark {
   transform: rotate(-45deg) translate(7px, -7px);
 }
 
-/* Mobile Menu Styles */
-@media (max-width: 968px) {
-  .menu-toggle {
-    display: block;
-  }
 
-  .nav-links {
-    position: fixed;
-    top: 0;
-    right: -100%;
-    width: 280px;
-    height: 100vh;
-    background: var(--dark-light);
-    backdrop-filter: blur(10px);
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 30px;
-    transition: right 0.4s ease;
-    box-shadow: -5px 0 25px rgba(0, 0, 0, 0.5);
-    z-index: 999;
-    padding: 60px 20px;
-  }
-
-  .nav-links.active {
-    right: 0;
-  }
-
-  .nav-links a {
-    font-size: 1.3rem;
-    width: 100%;
-    text-align: center;
-    padding: 15px 0;
-  }
-
-  .nav-links a::after {
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  /* Overlay when menu is open */
-  body.menu-open::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    z-index: 998;
-    animation: fadeIn 0.3s ease;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-}
 
 /* ===== COLOR CONSISTENCY FIX ===== */
 
@@ -2781,138 +2392,6 @@ nav {
   }
 }
 
-/* ===== MOBILE RESPONSIVE IMPROVEMENTS ===== */
-
-@media (max-width: 968px) {
-  /* Hero Section Mobile Fix */
-  #hero {
-    min-height: auto;
-    padding: 40px 20px;
-  }
-
-  .hero-content {
-    gap: 40px;
-  }
-
-  .hero-text h1 {
-    font-size: 2.2rem;
-    line-height: 1.2;
-  }
-
-  .hero-text .role {
-    font-size: 1.4rem;
-  }
-
-  .hero-text p {
-    font-size: 1rem;
-  }
-
-  /* Profile Image Mobile */
-  .profile-container {
-    width: 280px;
-    height: 280px;
-  }
-
-  .floating-badge {
-    font-size: 0.75rem;
-    padding: 8px 14px;
-  }
-
-  .badge-1 { top: 5%; left: -5%; }
-  .badge-2 { top: 65%; right: -10%; }
-  .badge-3 { bottom: 5%; left: 0%; }
-
-  /* Section Padding */
-  section {
-    padding: 60px 20px;
-  }
-
-  .section-header h2 {
-    font-size: 2rem;
-  }
-
-  .section-header p {
-    font-size: 1rem;
-  }
-
-  /* About Section Mobile */
-  #about {
-    padding: 60px 30px;
-  }
-
-  .about-text p {
-    font-size: 0.95rem;
-  }
-
-  /* Services Grid Mobile */
-  .services-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-
-  .service-card {
-    padding: 25px 20px;
-  }
-
-  /* Projects Grid Mobile */
-  .projects-grid {
-    grid-template-columns: 1fr;
-    gap: 25px;
-  }
-
-  /* Blog Grid Mobile */
-  .blog-grid {
-    grid-template-columns: 1fr;
-    gap: 25px;
-  }
-
-  /* Contact Section Mobile */
-  .contact-container {
-    grid-template-columns: 1fr;
-    gap: 30px;
-  }
-
-  /* Buttons Mobile */
-  .hero-buttons {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .btn {
-    width: 100%;
-    text-align: center;
-  }
-
-  /* Tech Stack Mobile */
-  .tech-stack {
-    justify-content: center;
-  }
-
-  .tech-badge {
-    font-size: 0.75rem;
-    padding: 6px 12px;
-  }
-}
-
-@media (max-width: 480px) {
-  .hero-text h1 {
-    font-size: 1.8rem;
-  }
-
-  .profile-container {
-    width: 240px;
-    height: 240px;
-  }
-
-  .service-card h3,
-  .project-content h3 {
-    font-size: 1.2rem;
-  }
-
-  .section-header h2 {
-    font-size: 1.6rem;
-  }
-}
 
 
 /* Hamburger Menu Button */
@@ -2934,63 +2413,7 @@ nav {
   transition: 0.3s;
 }
 
-/* Mobile Styles */
-@media (max-width: 968px) {
-  #menu-toggle {
-    display: block;
-  }
 
-  .nav-links {
-    position: fixed;
-    right: -100%;
-    top: 0;
-    height: 100vh;
-    width: 70%;
-    max-width: 300px;
-    background: rgba(21, 36, 69, 0.98);
-    flex-direction: column !important;
-    justify-content: center;
-    align-items: center;
-    gap: 40px !important;
-    transition: right 0.4s ease;
-    box-shadow: -5px 0 20px rgba(0, 0, 0, 0.5);
-    list-style: none;
-    padding: 0;
-  }
-
-  .nav-links.active {
-    right: 0;
-  }
-
-  .nav-links a {
-    font-size: 1.3rem;
-  }
-
-  /* Hamburger Animation */
-  #menu-toggle.active span:nth-child(1) {
-    transform: rotate(45deg) translate(7px, 7px);
-  }
-
-  #menu-toggle.active span:nth-child(2) {
-    opacity: 0;
-  }
-
-  #menu-toggle.active span:nth-child(3) {
-    transform: rotate(-45deg) translate(7px, -7px);
-  }
-
-  /* Overlay */
-  body.menu-active::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    z-index: 99;
-  }
-}
 
 /* ===== FORCE COLOR CONSISTENCY ON MOBILE ===== */
 
@@ -3006,30 +2429,7 @@ html {
   -ms-text-size-adjust: 100%;
 }
 
-/* Prevent any color filters on mobile */
-@media (max-width: 968px) {
-  * {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-  
-  /* Prevent mobile browser night mode from affecting colors */
-  body, section, div, nav, header, footer {
-    color-adjust: exact !important;
-    -webkit-print-color-adjust: exact !important;
-  }
-}
 
-/* iOS specific fixes */
-@supports (-webkit-touch-callout: none) {
-  body {
-    background: #060e31 !important;
-  }
-  
-  nav {
-    background: rgba(21, 36, 69, 0.95) !important;
-  }
-}
 
 
 .case-study-banner {
@@ -3165,21 +2565,7 @@ html {
   font-weight: 600;
 }
 
-@media (max-width: 768px) {
-  .case-study-banner {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-    padding: 2rem;
-  }
-  
-  .preview-stats {
-    gap: 1rem;
-  }
-  
-  .stat-item {
-    padding: 1rem 1.5rem;
-  }
-}
+
 
 /* ===== Contact Section ===== */
 .contact-section {
@@ -3349,82 +2735,109 @@ html {
   box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
 }
 
-/* 1. SAFETY SHIELD: Add this at the top of your responsive section */
+/* ============================================================
+   1. GLOBAL RESET & SAFETY (Paste this at the very top of your CSS)
+   ============================================================ */
 html, body {
-  overflow-x: hidden;
-  position: relative;
   width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* THE ZOOM FIX */
+  position: relative;
+  -webkit-text-size-adjust: 100%;
 }
 
-/* 2. TABLET & MOBILE (Everything under 968px) */
+/* ============================================================
+   2. RESPONSIVE DESIGN (Delete your old @media and paste this)
+   ============================================================ */
+
+/* Tablet & Mobile (Under 968px) */
 @media (max-width: 968px) {
-  .hero-content, .about-content, .contact-content {
-    grid-template-columns: 1fr;
+  /* Fix Grids: Force everything to 1 column */
+  .hero-content, 
+  .about-grid, 
+  .contact-container, 
+  .contact-content,
+  .footer-content,
+  .services-grid,
+  .projects-grid,
+  .blog-grid,
+  .case-study-banner {
+    grid-template-columns: 1fr !important;
     text-align: center;
+    gap: 30px;
   }
 
-  .services-grid, .process-grid, .portfolio-grid, 
-  .blog-grid, .tutorial-grid, .stats-grid, .footer-content {
-    grid-template-columns: repeat(2, 1fr);
+  /* MOBILE NAVIGATION FIX (No more right: -100%) */
+  #menu-toggle, .menu-toggle {
+    display: block !important;
+    z-index: 1001;
   }
 
-  /* FIXED MENU: No more right: -100% */
-  .nav-menu {
-    position: fixed;
-    top: 70px;
-    left: 0;
-    width: 100%;
+  .nav-links {
+    position: fixed !important;
+    top: 0;
+    left: 0 !important;
+    width: 100% !important;
     height: 100vh;
-    background: var(--card-bg);
-    flex-direction: column;
-    padding: 50px 30px;
-    gap: 20px;
-    z-index: 999;
+    background: rgba(21, 36, 69, 0.98); /* Matches your theme */
+    backdrop-filter: blur(10px);
+    flex-direction: column !important;
+    justify-content: center;
+    align-items: center;
+    gap: 40px !important;
+    z-index: 1000;
     
-    /* This hides it without making the page wider */
+    /* THE FIX: Use opacity/visibility to prevent the "Zoom Out" space */
     opacity: 0;
     visibility: hidden;
-    transition: all 0.3s ease;
+    transition: all 0.4s ease;
   }
 
-  .nav-menu.active {
+  .nav-links.active {
     opacity: 1;
     visibility: visible;
   }
 
-  .nav-toggle {
-    display: flex;
+  /* Profile & Badges: Pull inward so they don't leak off-screen */
+  .profile-container {
+    width: 280px !important;
+    height: 280px !important;
+    margin: 0 auto;
+  }
+
+  .badge-1 { top: 5% !important; left: 0 !important; }
+  .badge-2 { top: 65% !important; right: 0 !important; }
+  .badge-3 { bottom: 5% !important; left: 0 !important; }
+
+  .hero-text h1 {
+    font-size: 2.2rem;
+    line-height: 1.2;
   }
 }
 
-/* 3. MOBILE ONLY (Small Phones) */
-@media (max-width: 640px) {
-  .services-grid, .process-grid, .portfolio-grid, 
-  .blog-grid, .tutorial-grid, .stats-grid, .footer-content,
-  .form-row, .testimonial-track {
-    grid-template-columns: 1fr;
-  }
-
+/* Small Phones (Under 480px) */
+@media (max-width: 480px) {
   .hero-text h1 {
     font-size: 1.8rem;
   }
 
-  /* Profile & Badges Fix */
   .profile-container {
-    width: 250px !important;
-    height: 250px !important;
-    margin: 0 auto;
+    width: 240px !important;
+    height: 240px !important;
   }
 
-  .badge-1 { left: 0 !important; top: 10% !important; }
-  .badge-2 { right: 0 !important; top: 60% !important; }
-  .badge-3 { left: 0 !important; bottom: 10% !important; }
-  
-  .floating-badge {
-    font-size: 0.7rem;
-    white-space: nowrap;
+  .section-header h2 {
+    font-size: 1.6rem;
+  }
+
+  .btn {
+    width: 100%; /* Make buttons full-width for thumbs */
+    margin-bottom: 10px;
   }
 }
+
+
 
 
 
