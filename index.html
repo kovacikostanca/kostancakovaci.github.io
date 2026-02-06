@@ -582,68 +582,56 @@ I approach every project with curiosity, rigor, and creativity, ensuring that th
   <script src="script_new.js"></script>
 
   <script>
-  // We renamed 'contactForm' to 'myPortfolioForm' to avoid the error
-  const myPortfolioForm = document.getElementById('contactForm');
-  const mySubmitBtn = document.getElementById('submitBtn');
-  const MY_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwRYsSNlmuezCiNUCfJFb1sKbQWcjnSB7RJQF3969AMg3n8BBgrdJUnp1RDu2ZU1SiH/exec'; 
+  const contactForm = document.getElementById('contactForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwbB7XjCKoUpnNuGPpPJd_GtXSYTUMeyuqNHxi_FVrsMDCxiLs5N9JpnaEzzc1u3Abc1Q/exec'; // <--- PASTE IT HERE
 
-  if (myPortfolioForm) {
-    myPortfolioForm.addEventListener('submit', function(e) {
-      e.preventDefault();
+  contactForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    submitBtn.disabled = true;
+    submitBtn.innerText = "Sending...";
 
-      mySubmitBtn.disabled = true;
-      mySubmitBtn.innerText = "Sending... Please wait";
+    const fileInput = document.getElementById('fileInput');
+    const file = fileInput.files[0];
+    const formData = {
+      name: document.getElementById('name').value,
+      email: document.getElementById('email').value,
+      subject: document.getElementById('subject').value,
+      message: document.getElementById('message').value
+    };
 
-      const fileInput = document.getElementById('fileInput');
-      const file = fileInput.files[0];
-      
-      const formData = {
-        name: document.getElementById('name').value,
-        email: document.getElementById('email').value,
-        subject: document.getElementById('subject').value,
-        message: document.getElementById('message').value
-      };
-
-      if (file) {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = function() {
-          formData.file = {
-            base64: reader.result.split(',')[1],
-            type: file.type,
-            name: file.name
-          };
-          sendToGoogleNow(formData);
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = function() {
+        formData.file = {
+          base64: reader.result.split(',')[1],
+          type: file.type,
+          name: file.name
         };
-      } else {
-        sendToGoogleNow(formData);
-      }
+        sendData(formData);
+      };
+    } else {
+      sendData(formData);
+    }
+  });
+
+  function sendData(data) {
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: JSON.stringify(data)
+    })
+    .then(() => {
+      alert("Message sent successfully!");
+      contactForm.reset();
+    })
+    .catch(() => alert("Error sending message."))
+    .finally(() => {
+      submitBtn.disabled = false;
+      submitBtn.innerText = "Submit";
     });
   }
-
-  function sendToGoogleNow(data) {
-  // We convert the data to a URL-encoded string which Google Script handles more easily
-  
-  fetch(MY_SCRIPT_URL, {
-    method: 'POST',
-    body: JSON.stringify(data), // Send as a clean JSON string
-    mode: 'no-cors', 
-    cache: 'no-cache'
-  })
-  .then(() => {
-    document.getElementById('formStatus').style.display = 'block'; // Show success message
-    myPortfolioForm.reset();
-    setTimeout(() => { document.getElementById('formStatus').style.display = 'none'; }, 5000); // Hide after 5 seconds
-  })
-  .catch(error => {
-    console.error('Error:', error);
-    alert("Check console for errors.");
-  })
-  .finally(() => {
-    mySubmitBtn.disabled = false;
-    mySubmitBtn.innerText = "Submit";
-  });
-}
 </script>
 
 </body>
