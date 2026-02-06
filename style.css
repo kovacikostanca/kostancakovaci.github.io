@@ -943,41 +943,6 @@ body.dark {
 
 
 
-/* ===== MOBILE NAVIGATION FIX ===== */
-
-/* Hamburger Menu Button */
-.menu-toggle {
-  display: none;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 5px;
-  z-index: 1000;
-}
-
-.menu-toggle span {
-  display: block;
-  width: 28px;
-  height: 3px;
-  background: var(--text);
-  margin: 5px 0;
-  transition: all 0.3s ease;
-  border-radius: 2px;
-}
-
-/* Hamburger Animation */
-.menu-toggle.active span:nth-child(1) {
-  transform: rotate(45deg) translate(8px, 8px);
-}
-
-.menu-toggle.active span:nth-child(2) {
-  opacity: 0;
-}
-
-.menu-toggle.active span:nth-child(3) {
-  transform: rotate(-45deg) translate(7px, -7px);
-}
-
 
 
 /* ===== COLOR CONSISTENCY FIX ===== */
@@ -1026,24 +991,7 @@ nav {
 
 
 
-/* Hamburger Menu Button */
-#menu-toggle {
-  display: none;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 10px;
-  z-index: 101;
-}
 
-#menu-toggle span {
-  display: block;
-  width: 25px;
-  height: 3px;
-  background: #fff;
-  margin: 5px 0;
-  transition: 0.3s;
-}
 
 
 
@@ -2846,4 +2794,105 @@ html, body {
     color: var(--accent); /* This uses your #6366f1 indigo color */
     font-weight: 600;      /* Optional: makes the name stand out more */
 }
+
+
+/* ============================================================
+   2. NAVIGATION & HAMBURGER
+   ============================================================ */
+nav {
+  position: sticky;
+  top: 0;
+  background: var(--nav-bg);
+  backdrop-filter: blur(10px);
+  border-bottom: 2px solid rgba(99, 102, 241, 0.2);
+  z-index: 1000;
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 30px;
+}
+
+.nav-links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+/* --- THE HAMBURGER BUTTON --- */
+.menu-toggle {
+  display: none; /* Hidden on desktop */
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  z-index: 1001;
+}
+
+.menu-toggle span {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background: var(--text);
+  margin: 5px 0;
+  transition: 0.4s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+  border-radius: 2px;
+}
+
+/* Hamburger Animation when Active */
+.menu-toggle.active span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.menu-toggle.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle.active span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+/* ============================================================
+   3. MOBILE RESPONSIVE (The Fix)
+   ============================================================ */
+@media (max-width: 968px) {
+  .menu-toggle {
+    display: block; /* Show hamburger */
+  }
+
+  .nav-links {
+    position: fixed;
+    top: 0;
+    right: -100%; /* Hidden off-screen */
+    width: 80%;
+    height: 100vh;
+    background: var(--nav-bg);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: 0.4s ease-in-out;
+    box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+  }
+
+  .nav-links.active {
+    right: 0; /* Slide in */
+  }
+
+  /* Fix Grid Layouts for mobile */
+  .hero-content, .about-grid, .contact-container, .footer-content {
+    grid-template-columns: 1fr !important;
+    text-align: center;
+  }
+}
+
 
