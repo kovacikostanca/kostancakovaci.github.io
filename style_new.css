@@ -1703,3 +1703,9 @@ html, body {
     white-space: nowrap;
   }
 }
+
+/* ===== 3. FOOTER SPAN STYLING (Restored) ===== */
+.footer-name {
+    color: var(--primary); /* Uses your #6366f1 indigo */
+    font-weight: 600;
+}
