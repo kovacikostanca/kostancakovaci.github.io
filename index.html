@@ -618,23 +618,30 @@ I approach every project with curiosity, rigor, and creativity, ensuring that th
   }
 
   function sendToGoogleNow(data) {
-    fetch(MY_SCRIPT_URL, {
-      method: 'POST',
-      body: JSON.stringify(data)
-    })
-    .then(response => {
-      alert("Success! Your message and file have been sent.");
-      myPortfolioForm.reset();
-    })
-    .catch(error => {
-      alert("Oops! Something went wrong.");
-      console.error('Error:', error);
-    })
-    .finally(() => {
-      mySubmitBtn.disabled = false;
-      mySubmitBtn.innerText = "Submit";
-    });
-  }
+  fetch(MY_SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors', // <--- ADD THIS LINE
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+  .then(() => {
+    // With 'no-cors', we won't get a "Success" response we can read,
+    // so we assume it worked if it didn't hit the .catch
+    alert("Success! Your message has been sent.");
+    myPortfolioForm.reset();
+  })
+  .catch(error => {
+    alert("Oops! Something went wrong.");
+    console.error('Error:', error);
+  })
+  .finally(() => {
+    mySubmitBtn.disabled = false;
+    mySubmitBtn.innerText = "Submit";
+  });
+}
 </script>
 
 </body>
