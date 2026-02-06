@@ -1627,133 +1627,39 @@ ul {
   box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
 }
 
-/* ===== Responsive Design ===== */
-
-/* Tablet */
-@media (max-width: 968px) {
-  .hero-content,
-  .about-content,
-  .contact-content {
-    grid-template-columns: 1fr;
-  }
-
-  .services-grid,
-  .process-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .portfolio-grid,
-  .blog-grid,
-  .tutorial-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .footer-content {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .hero-text h1 {
-    font-size: 2.5rem;
-  }
-
-  .section-header h2 {
-    font-size: 2.2rem;
-  }
-
-  .nav-menu {
-    position: fixed;
-    top: 71px;
-    right: -100%;
-    width: 70%;
-    height: calc(100vh - 71px);
-    background: var(--card-bg);
-    flex-direction: column;
-    justify-content: start;
-    padding: 50px 30px;
-    gap: 20px;
-    transition: right 0.3s;
-    box-shadow: -5px 0 20px rgba(0, 0, 0, 0.1);
-  }
-
-  .nav-menu.active {
-    right: 0;
-  }
-
-  .nav-toggle {
-    display: flex;
-  }
-
-  .nav-link::after {
-    display: none;
-  }
+/* 1. SAFETY SHIELD: Add this at the top of your responsive section */
+html, body {
+  overflow-x: hidden;
+  position: relative;
+  width: 100%;
 }
 
-/* Mobile */
-@media (max-width: 640px) {
-  .container {
-    padding: 0 20px;
-  }
-
-  .top-bar-info {
-    flex-direction: column;
-    gap: 10px;
-    font-size: 0.85rem;
-  }
-
-  .top-bar-content {
-    flex-direction: column;
-    gap: 15px;
-  }
-
-  .hero-text h1 {
-    font-size: 2rem;
-  }
-
-  .section-header h2 {
-    font-size: 1.8rem;
-  }
-
-  .services-grid,
-  .process-grid,
-  .portfolio-grid,
-  .blog-grid,
-  .tutorial-grid,
-  .stats-grid,
-  .footer-content {
-    grid-template-columns: 1fr;
-  }
-
-  .form-row {
-    grid-template-columns: 1fr;
-  }
-
-  .testimonial-track {
-    grid-template-columns: 1fr;
-  }
-
-  .stat-item h3 {
-    font-size: 2.5rem;
-  }
-}
-
+/* 2. TABLET & MOBILE (Everything under 968px) */
 @media (max-width: 968px) {
+  .hero-content, .about-content, .contact-content {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .services-grid, .process-grid, .portfolio-grid, 
+  .blog-grid, .tutorial-grid, .stats-grid, .footer-content {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* FIXED MENU: No more right: -100% */
   .nav-menu {
     position: fixed;
-    right: 0; 
     top: 70px;
-    flex-direction: column;
-    background: var(--card-bg);
+    left: 0;
     width: 100%;
     height: 100vh;
-    text-align: center;
-    padding: 40px 0;
+    background: var(--card-bg);
+    flex-direction: column;
+    padding: 50px 30px;
+    gap: 20px;
     z-index: 999;
     
-    /* These three lines hide the menu without pushing it off-screen */
+    /* This hides it without making the page wider */
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s ease;
@@ -1763,96 +1669,37 @@ ul {
     opacity: 1;
     visibility: visible;
   }
-}
 
-@media (max-width: 480px) {
-  /* Pull the badges inward so they stay inside the screen boundaries */
-  .badge-1 { left: 5% !important; top: 10% !important; }
-  .badge-2 { right: 5% !important; top: 60% !important; }
-  .badge-3 { left: 5% !important; bottom: 10% !important; }
-
-  /* Ensure the container doesn't exceed phone width */
-  .profile-container {
-    max-width: 100%; 
-    height: auto;
-    aspect-ratio: 1 / 1;
+  .nav-toggle {
+    display: flex;
   }
 }
 
-/* Extra Small Devices */
-@media (max-width: 480px) {
-  .hero {
-    padding: 60px 0;
+/* 3. MOBILE ONLY (Small Phones) */
+@media (max-width: 640px) {
+  .services-grid, .process-grid, .portfolio-grid, 
+  .blog-grid, .tutorial-grid, .stats-grid, .footer-content,
+  .form-row, .testimonial-track {
+    grid-template-columns: 1fr;
   }
 
   .hero-text h1 {
     font-size: 1.8rem;
   }
 
-  .about-section,
-  .services-section,
-  .process-section,
-  .portfolio-section,
-  .blog-section,
-  .tutorial-section,
-  .testimonial-section,
-  .contact-section {
-    padding: 60px 0;
-  }
-
-  .section-header h2 {
-    font-size: 1.6rem;
-  }
-
-  .btn {
-    padding: 12px 25px;
-    font-size: 0.9rem;
-  }
-}
-
-.footer-name {
-    color: var(--primary); /* This uses your #6366f1 indigo color */
-    font-weight: 600;      /* Optional: makes the name stand out more */
-}
-
-@media (max-width: 968px) {
-  .nav-menu {
-    position: fixed;
-    right: -100%; /* Hides it off-screen to the right */
-    top: 70px;
-    flex-direction: column;
-    background: var(--card-bg);
-    width: 100%;
-    height: 100vh;
-    text-align: center;
-    transition: 0.3s;
-    padding: 40px 0;
-    z-index: 999;
-  }
-
-  /* When you toggle the 'active' class via JS, show the menu */
-  .nav-menu.active {
-    right: 0;
-  }
-
-  .nav-toggle {
-    display: flex; /* Shows the hamburger bars */
-  }
-  
-  .hero-content, .about-content, .contact-content {
-    grid-template-columns: 1fr; /* Stack elements vertically */
-    text-align: center;
-  }
-}
-
-@media (max-width: 480px) {
+  /* Profile & Badges Fix */
   .profile-container {
-    width: 280px;
-    height: 280px;
+    width: 250px !important;
+    height: 250px !important;
     margin: 0 auto;
   }
+
+  .badge-1 { left: 0 !important; top: 10% !important; }
+  .badge-2 { right: 0 !important; top: 60% !important; }
+  .badge-3 { left: 0 !important; bottom: 10% !important; }
   
-  .hero-text h1 {
-    font-size: 2.2rem;
+  .floating-badge {
+    font-size: 0.7rem;
+    white-space: nowrap;
   }
 }
