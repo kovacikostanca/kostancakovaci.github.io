@@ -2796,18 +2796,7 @@ html, body {
 }
 
 
-/* ============================================================
-   2. NAVIGATION & HAMBURGER
-   ============================================================ */
-nav {
-  position: sticky;
-  top: 0;
-  background: var(--nav-bg);
-  backdrop-filter: blur(10px);
-  border-bottom: 2px solid rgba(99, 102, 241, 0.2);
-  z-index: 1000;
-}
-
+/* --- 1. The Container --- */
 .nav-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -2817,82 +2806,71 @@ nav {
   padding: 15px 30px;
 }
 
-.nav-links {
-  display: flex;
-  gap: 30px;
-}
-
-.nav-links a {
-  color: var(--text-muted);
-  text-decoration: none;
-  font-weight: 500;
-  transition: 0.3s;
-}
-
-/* --- THE HAMBURGER BUTTON --- */
-.menu-toggle {
-  display: none; /* Hidden on desktop */
+/* --- 2. The Hamburger Button (using ID for JS) --- */
+#menu-toggle {
+  display: none; /* Hidden on Desktop */
   background: none;
   border: none;
   cursor: pointer;
   padding: 10px;
-  z-index: 1001;
+  z-index: 1001; /* Above the menu */
+  position: relative;
 }
 
-.menu-toggle span {
+#menu-toggle span {
   display: block;
-  width: 25px;
+  width: 28px;
   height: 3px;
-  background: var(--text);
-  margin: 5px 0;
-  transition: 0.4s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+  background: var(--text); /* Make sure this is #ffffff */
+  margin: 6px 0;
+  transition: all 0.4s cubic-bezier(0.68, -0.6, 0.32, 1.6);
   border-radius: 2px;
 }
 
-/* Hamburger Animation when Active */
-.menu-toggle.active span:nth-child(1) {
-  transform: translateY(8px) rotate(45deg);
+/* --- 3. Hamburger Animation (Triggered by .active class in JS) --- */
+#menu-toggle.active span:nth-child(1) {
+  transform: translateY(9px) rotate(45deg);
 }
 
-.menu-toggle.active span:nth-child(2) {
+#menu-toggle.active span:nth-child(2) {
   opacity: 0;
+  transform: translateX(-20px);
 }
 
-.menu-toggle.active span:nth-child(3) {
-  transform: translateY(-8px) rotate(-45deg);
+#menu-toggle.active span:nth-child(3) {
+  transform: translateY(-9px) rotate(-45deg);
 }
 
-/* ============================================================
-   3. MOBILE RESPONSIVE (The Fix)
-   ============================================================ */
+/* --- 4. Mobile Menu Layout --- */
 @media (max-width: 968px) {
-  .menu-toggle {
-    display: block; /* Show hamburger */
+  #menu-toggle {
+    display: block; /* Show on mobile */
   }
 
   .nav-links {
     position: fixed;
     top: 0;
     right: -100%; /* Hidden off-screen */
-    width: 80%;
+    width: 100%;
     height: 100vh;
-    background: var(--nav-bg);
+    background: rgba(6, 14, 49, 0.98); /* Solid dark bg */
+    backdrop-filter: blur(10px);
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    transition: 0.4s ease-in-out;
-    box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+    gap: 40px;
+    transition: right 0.4s ease-in-out;
+    z-index: 1000;
   }
 
+  /* When JS adds the .active class */
   .nav-links.active {
-    right: 0; /* Slide in */
-  }
-
-  /* Fix Grid Layouts for mobile */
-  .hero-content, .about-grid, .contact-container, .footer-content {
-    grid-template-columns: 1fr !important;
-    text-align: center;
+    right: 0;
   }
 }
 
-
+/* --- 5. Body Lock (Prevents scrolling when menu is open) --- */
+body.menu-active {
+  overflow: hidden;
+}
