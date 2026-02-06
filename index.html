@@ -618,24 +618,22 @@ I approach every project with curiosity, rigor, and creativity, ensuring that th
   }
 
   function sendToGoogleNow(data) {
+  // We convert the data to a URL-encoded string which Google Script handles more easily
+  const blob = new Blob([JSON.stringify(data)], {type : 'application/json'});
+  
   fetch(MY_SCRIPT_URL, {
     method: 'POST',
-    mode: 'no-cors', // <--- ADD THIS LINE
-    cache: 'no-cache',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
+    body: JSON.stringify(data), // Send as a clean JSON string
+    mode: 'no-cors', 
+    cache: 'no-cache'
   })
   .then(() => {
-    // With 'no-cors', we won't get a "Success" response we can read,
-    // so we assume it worked if it didn't hit the .catch
     alert("Success! Your message has been sent.");
     myPortfolioForm.reset();
   })
   .catch(error => {
-    alert("Oops! Something went wrong.");
     console.error('Error:', error);
+    alert("Check console for errors.");
   })
   .finally(() => {
     mySubmitBtn.disabled = false;
