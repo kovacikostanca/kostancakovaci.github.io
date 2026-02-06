@@ -489,32 +489,24 @@ I approach every project with curiosity, rigor, and creativity, ensuring that th
       <form class="contact-form" id="contactForm">
         <div class="form-row">
           <div class="form-group">
-            <input type="text" id="name" placeholder="Your Name" required>
+            <input type="text" id="name" name="name" placeholder="Your Name" required>
           </div>
           <div class="form-group">
-            <input type="email" id="email" placeholder="Your Email" required>
+            <input type="email" id="email" name="email" placeholder="Your Email" required>
           </div>
         </div>
         <div class="form-group">
-          <input type="text" id="subject" placeholder="Subject" required>
+          <input type="text" id="subject" name="subject" placeholder="Subject" required>
         </div>
         <div class="form-group">
-          <textarea id="message" placeholder="Your Message" rows="5" required></textarea>
+          <textarea id="message" name="message" placeholder="Your Message" rows="5" required></textarea>
         </div>
-
-        <div class="form-group">
-          <label for="fileInput" style="display: block; margin-bottom: 8px; color: #666;">
-            Attach a document (PDF, Word, JSON, etc.):
-          </label>
-          <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.json">
-        </div>
-
         <button type="submit" id="submitBtn" class="btn btn-primary">Submit</button>
-
         <p id="formStatus" style="display:none; color: green; margin-top: 10px; font-weight: bold;">
-            Success! I'll get back to you soon.
+          Success! I'll get back to you soon.
         </p>
       </form>
+
     </div>
   </div>
 </section>
@@ -580,7 +572,9 @@ I approach every project with curiosity, rigor, and creativity, ensuring that th
 
   <script src="script_new.js"></script>
 
-  <script>
+
+
+<script>
 document.getElementById("contactForm").addEventListener("submit", function(e) {
   e.preventDefault();
 
@@ -597,27 +591,29 @@ document.getElementById("contactForm").addEventListener("submit", function(e) {
     message: document.getElementById("message").value
   };
 
-  fetch("https://script.google.com/macros/s/AKfycbybFLJWfWLA2T0ThJkR5ZYSbqRGbkD-Yx-BhB1X1PdU3dPDLK9jlECX2C4zAB3iY5TgbA/exec", {
+  fetch("https://script.google.com/macros/s/AKfycbw9g0rDrozK66G7Rk_x735PiBmgBYv7dTnqEiu6wfQk5ELqpbeMJC2uoEnVoj1XSjyY4w/exec", {
     method: "POST",
     body: JSON.stringify(data),
     headers: { "Content-Type": "application/json" }
   })
   .then(res => res.json())
   .then(response => {
-    if (response.success) {
+    if(response.success) {
       status.style.display = "block";
-      document.getElementById("contactForm").reset();
+      this.reset();
     } else {
-      alert("Something went wrong.");
+      alert("Error: " + response.error);
     }
   })
-  .catch(() => alert("Error sending message"))
+  .catch(() => alert("Failed to send message"))
   .finally(() => {
     submitBtn.disabled = false;
     submitBtn.textContent = "Submit";
   });
 });
 </script>
+
+
 
 
 </body>
