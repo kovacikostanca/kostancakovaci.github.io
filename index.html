@@ -578,67 +578,61 @@ I approach every project with curiosity, rigor, and creativity, ensuring that th
   <script src="script_new.js"></script>
 
   <script>
-  // 1. Paste your Google Web App URL here
-  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwRYsSNlmuezCiNUCfJFb1sKbQWcjnSB7RJQF3969AMg3n8BBgrdJUnp1RDu2ZU1SiH/exec'; 
+  // We renamed 'contactForm' to 'myPortfolioForm' to avoid the error
+  const myPortfolioForm = document.getElementById('contactForm');
+  const mySubmitBtn = document.getElementById('submitBtn');
+  const MY_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwRYsSNlmuezCiNUCfJFb1sKbQWcjnSB7RJQF3969AMg3n8BBgrdJUnp1RDu2ZU1SiH/exec'; 
 
-  const contactForm = document.getElementById('contactForm');
-  const submitBtn = document.getElementById('submitBtn');
+  if (myPortfolioForm) {
+    myPortfolioForm.addEventListener('submit', function(e) {
+      e.preventDefault();
 
-  contactForm.addEventListener('submit', function(e) {
-    e.preventDefault();
+      mySubmitBtn.disabled = true;
+      mySubmitBtn.innerText = "Sending... Please wait";
 
-    // Change button state to show progress
-    submitBtn.disabled = true;
-    submitBtn.innerText = "Sending... Please wait";
-
-    const fileInput = document.getElementById('fileInput');
-    const file = fileInput.files[0];
-    
-    // Prepare the basic form data
-    const formData = {
-      name: document.getElementById('name').value,
-      email: document.getElementById('email').value,
-      subject: document.getElementById('subject').value,
-      message: document.getElementById('message').value
-    };
-
-    // Check if a file is attached
-    if (file) {
-      const reader = new FileReader();
+      const fileInput = document.getElementById('fileInput');
+      const file = fileInput.files[0];
       
-      // Convert file to Base64 (so it can be sent as text)
-      reader.readAsDataURL(file);
-      reader.onload = function() {
-        formData.file = {
-          base64: reader.result.split(',')[1],
-          type: file.type,
-          name: file.name
-        };
-        sendToGoogle(formData);
+      const formData = {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        subject: document.getElementById('subject').value,
+        message: document.getElementById('message').value
       };
-    } else {
-      // No file? Just send the text
-      sendToGoogle(formData);
-    }
-  });
 
-  function sendToGoogle(data) {
-    fetch(SCRIPT_URL, {
+      if (file) {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function() {
+          formData.file = {
+            base64: reader.result.split(',')[1],
+            type: file.type,
+            name: file.name
+          };
+          sendToGoogleNow(formData);
+        };
+      } else {
+        sendToGoogleNow(formData);
+      }
+    });
+  }
+
+  function sendToGoogleNow(data) {
+    fetch(MY_SCRIPT_URL, {
       method: 'POST',
       body: JSON.stringify(data)
     })
     .then(response => {
       alert("Success! Your message and file have been sent.");
-      contactForm.reset();
+      myPortfolioForm.reset();
     })
     .catch(error => {
-      alert("Ops! Something went wrong. Check the console for errors.");
+      alert("Oops! Something went wrong.");
       console.error('Error:', error);
     })
     .finally(() => {
-      // Reset button state
-      submitBtn.disabled = false;
-      submitBtn.innerText = "Submit";
+      mySubmitBtn.disabled = false;
+      mySubmitBtn.innerText = "Submit";
     });
   }
 </script>
