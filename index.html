@@ -592,24 +592,21 @@ document.getElementById("contactForm").addEventListener("submit", function(e) {
   };
 
   fetch("https://script.google.com/macros/s/AKfycbw9g0rDrozK66G7Rk_x735PiBmgBYv7dTnqEiu6wfQk5ELqpbeMJC2uoEnVoj1XSjyY4w/exec", {
-    method: "POST",
-    body: JSON.stringify(data),
-    headers: { "Content-Type": "application/json" }
-  })
-  .then(res => res.json())
-  .then(response => {
-    if(response.success) {
-      status.style.display = "block";
-      this.reset();
-    } else {
-      alert("Error: " + response.error);
-    }
-  })
-  .catch(() => alert("Failed to send message"))
-  .finally(() => {
-    submitBtn.disabled = false;
-    submitBtn.textContent = "Submit";
-  });
+  method: "POST",
+  body: JSON.stringify(data),
+  headers: { "Content-Type": "application/json" }
+})
+.then(res => res.json())
+.then(response => {
+  if(response.success) {
+    document.getElementById("formStatus").style.display = "block";
+    this.reset();
+  } else {
+    alert("Error: " + response.error);
+  }
+})
+.catch(() => alert("Failed to send message"));
+
 });
 </script>
 
