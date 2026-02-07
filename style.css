@@ -2821,3 +2821,17 @@ html, body {
 body.menu-active {
   overflow: hidden;
 }
+
+
+#fileInput {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #f9f9f9;
+  cursor: pointer;
+}
+
+#fileInput:hover {
+  border-color: #007bff; /* Or whatever your primary color is */
+}

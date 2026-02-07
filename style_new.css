@@ -1461,58 +1461,186 @@ ul {
 }
 
 /* ===== Contact Section ===== */
+/* ===== Contact Section - Minimal with Particles ===== */
 .contact-section {
-  padding: 100px 0;
+  padding: 120px 0;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
 }
 
-.contact-content {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 60px;
-  align-items: start;
+[data-theme="light"] .contact-section {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
 }
 
-.contact-image img {
+.particles-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  border-radius: 10px;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
 }
 
-.contact-form {
+.particle {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+  animation: particleFloat 20s infinite ease-in-out;
+}
+
+.particle:nth-child(1) {
+  top: 10%;
+  left: 10%;
+  animation-delay: 0s;
+  animation-duration: 15s;
+}
+
+.particle:nth-child(2) {
+  top: 60%;
+  left: 70%;
+  animation-delay: 2s;
+  animation-duration: 18s;
+}
+
+.particle:nth-child(3) {
+  top: 30%;
+  left: 50%;
+  animation-delay: 4s;
+  animation-duration: 20s;
+}
+
+.particle:nth-child(4) {
+  top: 70%;
+  left: 20%;
+  animation-delay: 1s;
+  animation-duration: 22s;
+}
+
+.particle:nth-child(5) {
+  top: 20%;
+  left: 80%;
+  animation-delay: 3s;
+  animation-duration: 17s;
+}
+
+.particle:nth-child(6) {
+  top: 80%;
+  left: 60%;
+  animation-delay: 5s;
+  animation-duration: 19s;
+}
+
+@keyframes particleFloat {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(50px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-30px, 30px) scale(0.9);
+  }
+}
+
+.contact-minimal {
+  position: relative;
+  z-index: 1;
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.contact-minimal h2 {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  font-family: sans-serif;
+}
+
+.contact-subtitle {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  line-height: 1.8;
+  margin-bottom: 40px;
+}
+
+.btn-contact {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 45px;
+  font-size: 1.1rem;
+  background: var(--gradient);
+  color: white;
+  border-radius: 50px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+  margin-bottom: 30px;
+}
+
+.btn-contact:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+}
+
+.btn-contact i {
+  font-size: 1.2rem;
+}
+
+.contact-social {
   display: flex;
-  flex-direction: column;
   gap: 20px;
+  justify-content: center;
+  margin-top: 30px;
 }
 
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
-
-.form-group input,
-.form-group textarea {
-  width: 100%;
-  padding: 15px;
-  background: var(--card-bg);
-  border: 1px solid rgba(99, 102, 241, 0.2);
-  border-radius: 5px;
+.contact-social a {
+  width: 50px;
+  height: 50px;
+  background: rgba(99, 102, 241, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
   color: var(--text);
-  font-family: inherit;
-  font-size: 1rem;
-  transition: all 0.3s;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(99, 102, 241, 0.2);
 }
 
-.form-group input:focus,
-.form-group textarea:focus {
-  outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+.contact-social a:hover {
+  background: var(--gradient);
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
 }
 
-.form-group textarea {
-  resize: vertical;
+/* Responsive */
+@media (max-width: 640px) {
+  .contact-minimal h2 {
+    font-size: 2rem;
+  }
+  
+  .contact-subtitle {
+    font-size: 1rem;
+  }
+  
+  .btn-contact {
+    padding: 16px 35px;
+    font-size: 1rem;
+  }
+  
+  .particle {
+    width: 200px;
+    height: 200px;
+  }
 }
-
 /* ===== Footer ===== */
 .footer {
   background: rgba(15, 23, 42, 0.8);

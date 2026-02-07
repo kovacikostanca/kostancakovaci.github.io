@@ -459,3 +459,5 @@ window.addEventListener('beforeprint', () => {
 console.log('%c👋 Welcome to my portfolio!', 'color: #6366f1; font-size: 20px; font-weight: bold;');
 console.log('%c💼 Looking for a data scientist? Let\'s connect!', 'color: #8b5cf6; font-size: 14px;');
 console.log('%c📧 kostanca@example.com', 'color: #94a3b8; font-size: 12px;');
+
+
